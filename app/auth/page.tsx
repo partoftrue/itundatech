@@ -8,6 +8,7 @@ import { useAuth } from "@/components/auth/auth-provider"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 import Image from "next/image"
+import { LoadingSpinner } from "@/components/ui/loading-spinner"
 
 export default function AuthPage() {
   const { user, isLoading } = useAuth()
@@ -22,7 +23,7 @@ export default function AuthPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <p>Loading...</p>
+        <LoadingSpinner size="lg" />
       </div>
     )
   }
@@ -32,12 +33,7 @@ export default function AuthPage() {
       <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
         <div className="hidden md:block">
           <div className="relative h-72 md:h-96">
-            <Image
-              src="/placeholder.svg?height=500&width=500&text=👩‍💻"
-              alt="Login illustration"
-              fill
-              className="object-contain"
-            />
+            <Image src="/auth-illustration.png" alt="Login illustration" fill className="object-contain" />
           </div>
         </div>
         <div>

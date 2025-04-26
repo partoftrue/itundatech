@@ -11,8 +11,11 @@ type AuthContextType = {
   session: Session | null
   isLoading: boolean
   signIn: (email: string, password: string) => Promise<void>
-  signUp: (email: string, password: string, name: string) => Promise<void>
+  signUp: (email: string, password: string, name: string) => Promise<{ user: User | null; session: Session | null }>
+  signInWithGoogle: () => Promise<void>
   signOut: () => Promise<void>
+  refreshUser: () => Promise<void>
+  resendVerificationEmail: (email: string) => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -48,9 +51,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [supabase.auth])
 
+  const refreshUser = async () => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession()
+    setSession(session)
+    setUser(session?.user ?? null)
+  }
+
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    const { error, data } = await supabase.auth.signInWithPassword({ email, password })
+
     if (error) throw error
+
+    // Check if email is verified - only if we have a user and the provider is email
+    if (data.user && data.user.app_metadata.provider === "email" && !data.user.email_confirmed_at) {
+      throw new Error("Please verify your email before signing in")
+    }
   }
 
   const signUp = async (email: string, password: string, name: string) => {
@@ -59,6 +76,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       password,
       options: {
         data: { name },
+        emailRedirectTo: `${window.location.origin}/auth/callback?verification=true`,
       },
     })
 
@@ -74,10 +92,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (profileError) throw profileError
     }
+
+    return data
+  }
+
+  const signInWithGoogle = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    })
+    if (error) throw error
   }
 
   const signOut = async () => {
     const { error } = await supabase.auth.signOut()
+    if (error) throw error
+  }
+
+  const resendVerificationEmail = async (email: string) => {
+    const { error } = await supabase.auth.resend({
+      type: "signup",
+      email,
+      options: {
+        emailRedirectTo: `${window.location.origin}/auth/callback?verification=true`,
+      },
+    })
+
     if (error) throw error
   }
 
@@ -87,7 +129,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     isLoading,
     signIn,
     signUp,
+    signInWithGoogle,
     signOut,
+    refreshUser,
+    resendVerificationEmail,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

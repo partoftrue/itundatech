@@ -23,28 +23,13 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   icons: {
     icon: [
-      { url: "/icon.png", media: "(prefers-color-scheme: light)" },
-      { url: "/icon-dark.png", media: "(prefers-color-scheme: dark)" },
+      { url: "/icon.png", sizes: "32x32", type: "image/png" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+      { url: "/icon.png", type: "image/svg+xml" },
     ],
-    shortcut: ["/icon.png"],
-    apple: [
-      { url: "/apple-icon.png", media: "(prefers-color-scheme: light)" },
-      { url: "/apple-icon-dark.png", media: "(prefers-color-scheme: dark)" },
-    ],
-    other: [
-      {
-        rel: "icon",
-        type: "image/png",
-        url: "/icon.png",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        rel: "icon",
-        type: "image/png",
-        url: "/icon-dark.png",
-        media: "(prefers-color-scheme: dark)",
-      },
-    ],
+    shortcut: ["/favicon.ico"],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
   },
     generator: 'v0.dev'
 }
@@ -68,8 +53,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={inter.variable}>
       <head>
-        <link rel="icon" href="/icon.png" media="(prefers-color-scheme: light)" />
-        <link rel="icon" href="/icon-dark.png" media="(prefers-color-scheme: dark)" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/icon.png" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/apple-icon.png" />
       </head>
       <body className="font-sans">
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
