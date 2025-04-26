@@ -18,6 +18,18 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "itunda.tech - Developer & Designer Insights",
   description: "A platform for sharing developer and designer insights",
+  icons: {
+    icon: [{ url: "/icon.png" }],
+    shortcut: ["/icon.png"],
+    apple: [{ url: "/apple-icon.png" }],
+    other: [
+      {
+        rel: "icon",
+        type: "image/png",
+        url: "/icon.png",
+      },
+    ],
+  },
     generator: 'v0.dev'
 }
 
@@ -36,6 +48,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning className={inter.variable}>
+      <head>
+        <link rel="icon" href="/icon.png" />
+      </head>
       <body className="font-sans">
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <AuthProvider>
