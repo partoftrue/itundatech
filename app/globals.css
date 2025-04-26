@@ -65,6 +65,14 @@
   h6 {
     @apply font-medium tracking-tight;
   }
+
+  /* Add smooth transitions for theme changes */
+  body,
+  body * {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+  }
 }
 
 @layer components {
@@ -118,6 +126,24 @@
   }
 }
 
+@keyframes spin-bolt {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(90deg) scale(1.1);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  75% {
+    transform: rotate(270deg) scale(1.1);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .animate-float {
   animation: float 6s ease-in-out infinite;
 }
@@ -132,6 +158,10 @@
 
 .animate-fade-in {
   animation: fade-in 0.5s ease-out forwards;
+}
+
+.animate-spin-bolt {
+  animation: spin-bolt 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
 /* Prose styles to match our brand */

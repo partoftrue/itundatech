@@ -1,5 +1,9 @@
+"use client"
+
 import type React from "react"
+
 import Link from "next/link"
+import { useTheme } from "next-themes"
 import { cn } from "@/lib/utils"
 
 interface LogoProps {
@@ -9,6 +13,9 @@ interface LogoProps {
 }
 
 export function Logo({ className, size = "md", linkProps }: LogoProps) {
+  const { resolvedTheme } = useTheme()
+  const isDarkMode = resolvedTheme === "dark"
+
   const sizes = {
     sm: {
       bolt: "h-4 w-4",
@@ -29,7 +36,7 @@ export function Logo({ className, size = "md", linkProps }: LogoProps) {
       {/* Electric Bolt SVG */}
       <svg
         viewBox="0 0 24 24"
-        className={cn("text-brand mr-1", sizes[size].bolt)}
+        className={cn("mr-1", sizes[size].bolt, isDarkMode ? "text-white" : "text-brand")}
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
@@ -42,8 +49,8 @@ export function Logo({ className, size = "md", linkProps }: LogoProps) {
           strokeLinejoin="round"
         />
       </svg>
-      <span className={cn("font-bold text-brand", sizes[size].text)}>itunda</span>
-      <span className={cn("font-bold text-gray-700", sizes[size].text)}>.tech</span>
+      <span className={cn("font-bold", sizes[size].text, isDarkMode ? "text-white" : "text-brand")}>itunda</span>
+      <span className={cn("font-bold", sizes[size].text, isDarkMode ? "text-gray-300" : "text-gray-700")}>.tech</span>
     </div>
   )
 

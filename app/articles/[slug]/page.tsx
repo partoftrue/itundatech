@@ -1,7 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { CommentList } from "@/components/comments/comment-list"
-import { CommentForm } from "@/components/comments/comment-form"
+import { CommentSection } from "@/components/comments/comment-section"
 import { ReadingProgress } from "@/components/reading-progress"
 import { getArticleBySlug } from "@/lib/articles"
 import Image from "next/image"
@@ -108,13 +107,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           </div>
 
           {/* Comments Section */}
-          <div id="comments" className="mt-12 pt-8 border-t">
-            <h2 className="text-2xl font-bold mb-6">Comments</h2>
-            <CommentForm articleId={article.id} />
-            <div className="mt-8">
-              <CommentList articleId={article.id} />
-            </div>
-          </div>
+          <CommentSection articleId={article.id} />
         </article>
       </div>
     </>

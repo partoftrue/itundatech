@@ -1,6 +1,8 @@
 import { getArticles } from "@/lib/articles"
-import { ArticleListItem } from "@/components/article-list-item"
+import { ArticleCardToss } from "@/components/article-card-toss"
 import { CategoryTabs } from "@/components/category-tabs"
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
 export default async function Home() {
   const allArticles = await getArticles({ limit: 10 })
@@ -21,8 +23,14 @@ export default async function Home() {
       <div className="max-w-screen-xl mx-auto px-4 py-6">
         <div className="divide-y">
           {allArticles.map((article) => (
-            <ArticleListItem key={article.id} article={article} />
+            <ArticleCardToss key={article.id} article={article} />
           ))}
+        </div>
+
+        <div className="flex justify-center mt-8">
+          <Button asChild className="rounded-full">
+            <Link href="/articles">View All Articles</Link>
+          </Button>
         </div>
       </div>
     </div>

@@ -2,10 +2,37 @@ import { getArticles, getCategories } from "@/lib/articles"
 import { CategoryTabs } from "@/components/category-tabs"
 import { ArticleCardToss } from "@/components/article-card-toss"
 import { Pagination } from "@/components/pagination"
+import { notFound } from "next/navigation"
 
-export default async function ArticlesPage() {
-  const articles = await getArticles({ limit: 10 })
+interface ArticlesPageProps {
+  params: {
+    page: string
+  }
+}
+
+export default async function ArticlesPagePaginated({ params }: ArticlesPageProps) {
+  const page = Number.parseInt(params.page)
+
+  // Validate page number
+  if (isNaN(page) || page < 1) {
+    notFound()
+  }
+
+  const articlesPerPage = 10
+  const articles = await getArticles({
+    limit: articlesPerPage,
+    offset: (page - 1) * articlesPerPage,
+  })
+
+  // If no articles and page > 1, return 404
+  if (articles.length === 0 && page > 1) {
+    notFound()
+  }
+
   const dbCategories = await getCategories()
+
+  // For demo purposes, assume 15 total pages
+  const totalPages = 15
 
   const categories = [
     { name: "All", href: "/articles" },
@@ -29,7 +56,7 @@ export default async function ArticlesPage() {
         </div>
 
         {/* Pagination */}
-        <Pagination currentPage={1} totalPages={15} basePath="/articles/page" />
+        <Pagination currentPage={page} totalPages={totalPages} basePath="/articles/page" />
       </div>
     </div>
   )

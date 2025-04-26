@@ -10,6 +10,8 @@ import { cn } from "@/lib/utils"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Logo } from "./logo"
 import Link from "next/link"
+import { ThemePreferences } from "./theme-preferences"
+import { ThemeToggle } from "./theme-toggle"
 
 export default function Header() {
   const pathname = usePathname()
@@ -40,6 +42,8 @@ export default function Header() {
             </div>
 
             <div className="flex items-center space-x-2">
+              <ThemePreferences />
+
               <Button
                 variant="ghost"
                 size="icon"
@@ -79,6 +83,11 @@ export default function Header() {
                         Login
                       </Link>
                     )}
+
+                    <div className="flex items-center gap-2 pt-4 border-t">
+                      <ThemeToggle />
+                      <span className="text-sm text-muted-foreground">Toggle theme</span>
+                    </div>
                   </div>
                 </SheetContent>
               </Sheet>

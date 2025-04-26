@@ -70,7 +70,9 @@
     "@tiptap/extension-placeholder": "latest",
     "@tailwindcss/typography": "latest",
     "remark": "latest",
-    "remark-html": "latest"
+    "remark-html": "latest",
+    "@supabase/auth-helpers-nextjs": "latest",
+    "chart.js": "latest"
   },
   "devDependencies": {
     "@types/node": "^22",
