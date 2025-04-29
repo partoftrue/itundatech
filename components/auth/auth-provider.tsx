@@ -12,10 +12,10 @@ type AuthContextType = {
   isLoading: boolean
   signIn: (email: string, password: string) => Promise<void>
   signUp: (email: string, password: string, name: string) => Promise<{ user: User | null; session: Session | null }>
-  signInWithGoogle: () => Promise<void>
   signOut: () => Promise<void>
   refreshUser: () => Promise<void>
   resendVerificationEmail: (email: string) => Promise<void>
+  resetPassword: (email: string) => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -96,16 +96,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return data
   }
 
-  const signInWithGoogle = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
-    })
-    if (error) throw error
-  }
-
   const signOut = async () => {
     const { error } = await supabase.auth.signOut()
     if (error) throw error
@@ -123,16 +113,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (error) throw error
   }
 
+  const resetPassword = async (email: string) => {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/auth/update-password`,
+    })
+
+    if (error) throw error
+  }
+
   const value = {
     user,
     session,
     isLoading,
     signIn,
     signUp,
-    signInWithGoogle,
     signOut,
     refreshUser,
     resendVerificationEmail,
+    resetPassword,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

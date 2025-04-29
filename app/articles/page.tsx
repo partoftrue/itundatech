@@ -1,36 +1,20 @@
-import { getArticles, getCategories } from "@/lib/articles"
-import { CategoryTabs } from "@/components/category-tabs"
-import { ArticleCardToss } from "@/components/article-card-toss"
-import { Pagination } from "@/components/pagination"
+import { getArticles } from "@/lib/articles"
+import { ArticleList } from "@/components/article-list"
 
 export default async function ArticlesPage() {
   const articles = await getArticles({ limit: 10 })
-  const dbCategories = await getCategories()
-
-  const categories = [
-    { name: "All", href: "/articles" },
-    ...dbCategories.map((cat) => ({
-      name: cat.name,
-      href: `/categories/${cat.slug}`,
-    })),
-  ]
 
   return (
-    <div>
-      {/* Category Tabs */}
-      <CategoryTabs categories={categories} />
-
-      {/* Articles List */}
-      <div className="max-w-screen-xl mx-auto px-4 py-6">
-        <div className="divide-y">
-          {articles.map((article) => (
-            <ArticleCardToss key={article.id} article={article} />
-          ))}
-        </div>
-
-        {/* Pagination */}
-        <Pagination currentPage={1} totalPages={15} basePath="/articles/page" />
-      </div>
+    <div className="max-w-screen-xl mx-auto px-4 py-12">
+      <ArticleList
+        articles={articles}
+        title="All Articles"
+        description="Browse all our articles across all categories"
+        showPagination={true}
+        currentPage={1}
+        totalPages={15}
+        basePath="/articles/page"
+      />
     </div>
   )
 }

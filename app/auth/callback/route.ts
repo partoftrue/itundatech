@@ -36,8 +36,7 @@ export async function GET(request: Request) {
         const { error: insertError } = await supabase.from("users").insert({
           id: user.id,
           email: user.email!,
-          name: user.user_metadata.full_name || user.email!.split("@")[0],
-          avatar_url: user.user_metadata.avatar_url,
+          name: user.user_metadata.name || user.email!.split("@")[0],
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         })

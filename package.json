@@ -30,7 +30,7 @@
     "@radix-ui/react-select": "2.1.4",
     "@radix-ui/react-separator": "latest",
     "@radix-ui/react-slider": "1.2.2",
-    "@radix-ui/react-slot": "1.1.1",
+    "@radix-ui/react-slot": "latest",
     "@radix-ui/react-switch": "1.1.2",
     "@radix-ui/react-tabs": "1.1.2",
     "@radix-ui/react-toast": "latest",
@@ -60,6 +60,7 @@
     "zod": "^3.24.1",
     "@tiptap/pm": "latest",
     "@tiptap/core": "latest",
+    "@emotion/is-prop-valid": "latest",
     "@supabase/supabase-js": "latest",
     "@tiptap/react": "latest",
     "@tiptap/starter-kit": "latest",
@@ -68,11 +69,12 @@
     "@tiptap/extension-image": "latest",
     "@tiptap/extension-code-block": "latest",
     "@tiptap/extension-placeholder": "latest",
-    "@tailwindcss/typography": "latest",
     "remark": "latest",
     "remark-html": "latest",
-    "@supabase/auth-helpers-nextjs": "latest",
-    "chart.js": "latest"
+    "chart.js": "latest",
+    "framer-motion": "latest",
+    "uuid": "latest",
+    "@tailwindcss/typography": "latest"
   },
   "devDependencies": {
     "@types/node": "^22",

@@ -1,16 +1,12 @@
-import { getArticles, getCategories } from "@/lib/articles"
-import { CategoryTabs } from "@/components/category-tabs"
-import { ArticleCardToss } from "@/components/article-card-toss"
-import { Pagination } from "@/components/pagination"
+import { getArticles } from "@/lib/articles"
+import { ArticleList } from "@/components/article-list"
 import { notFound } from "next/navigation"
 
-interface ArticlesPageProps {
-  params: {
-    page: string
-  }
-}
-
-export default async function ArticlesPagePaginated({ params }: ArticlesPageProps) {
+export default async function ArticlesPagePaginated({
+  params,
+}: {
+  params: { page: string }
+}) {
   const page = Number.parseInt(params.page)
 
   // Validate page number
@@ -29,35 +25,25 @@ export default async function ArticlesPagePaginated({ params }: ArticlesPageProp
     notFound()
   }
 
-  const dbCategories = await getCategories()
-
   // For demo purposes, assume 15 total pages
   const totalPages = 15
 
-  const categories = [
-    { name: "All", href: "/articles" },
-    ...dbCategories.map((cat) => ({
-      name: cat.name,
-      href: `/categories/${cat.slug}`,
-    })),
-  ]
+  // If page is greater than total pages, return 404
+  if (page > totalPages) {
+    notFound()
+  }
 
   return (
-    <div>
-      {/* Category Tabs */}
-      <CategoryTabs categories={categories} />
-
-      {/* Articles List */}
-      <div className="max-w-screen-xl mx-auto px-4 py-6">
-        <div className="divide-y">
-          {articles.map((article) => (
-            <ArticleCardToss key={article.id} article={article} />
-          ))}
-        </div>
-
-        {/* Pagination */}
-        <Pagination currentPage={page} totalPages={totalPages} basePath="/articles/page" />
-      </div>
+    <div className="max-w-screen-xl mx-auto px-4 py-12">
+      <ArticleList
+        articles={articles}
+        title="All Articles"
+        description="Browse all our articles across all categories"
+        showPagination={true}
+        currentPage={page}
+        totalPages={totalPages}
+        basePath="/articles/page"
+      />
     </div>
   )
 }

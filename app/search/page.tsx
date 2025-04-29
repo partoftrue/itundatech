@@ -3,8 +3,9 @@ import { Input } from "@/components/ui/input"
 import { createServerSupabaseClient } from "@/lib/supabase"
 import Link from "next/link"
 import { SearchIcon, Filter, X } from "lucide-react"
-import { ArticleListItem } from "@/components/article-list-item"
-import { getCategories, getTags } from "@/lib/articles"
+import { ArticleList } from "@/components/article-list"
+import { getAllCategories } from "@/lib/categories"
+import { getTags } from "@/lib/articles"
 import { Badge } from "@/components/ui/badge"
 
 export default async function SearchPage({
@@ -17,7 +18,7 @@ export default async function SearchPage({
   const tagFilter = typeof searchParams.tag === "string" ? searchParams.tag : ""
 
   const supabase = createServerSupabaseClient()
-  const categories = await getCategories()
+  const categories = await getAllCategories()
   const tags = await getTags()
 
   let results = []
@@ -154,27 +155,15 @@ export default async function SearchPage({
           {/* Main content */}
           <div className="md:col-span-3">
             {query || categoryFilter || tagFilter ? (
-              <>
-                <h2 className="text-xl font-semibold mb-6">
-                  {results.length} result{results.length !== 1 ? "s" : ""}
-                  {query && ` for "${query}"`}
-                </h2>
-
-                {results.length > 0 ? (
-                  <div className="divide-y">
-                    {results.map((article) => (
-                      <ArticleListItem key={article.id} article={article} />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-12 bg-muted/30 rounded-lg">
-                    <p className="text-muted-foreground mb-4">No articles found matching your search criteria.</p>
-                    <Button variant="outline" asChild>
-                      <Link href="/articles">Browse All Articles</Link>
-                    </Button>
-                  </div>
-                )}
-              </>
+              <ArticleList
+                articles={results}
+                title={`${results.length} result${results.length !== 1 ? "s" : ""}${query ? ` for "${query}"` : ""}`}
+                emptyMessage="No articles found matching your search criteria."
+                emptyAction={{
+                  text: "Browse All Articles",
+                  href: "/articles",
+                }}
+              />
             ) : (
               <div className="text-center py-12 bg-muted/30 rounded-lg">
                 <p className="text-muted-foreground mb-4">Enter a search term or use filters to find articles.</p>

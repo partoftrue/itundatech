@@ -1,42 +1,40 @@
 "use client"
 
+import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
-import { useThemePreference } from "@/hooks/use-theme-preference"
+import { Moon, Sun } from "lucide-react"
+import { useEffect, useState } from "react"
 
 export function ThemeToggle() {
-  const { resolvedTheme, toggleTheme, mounted } = useThemePreference()
+  const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
 
-  if (!mounted) return null
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
-  const isDark = resolvedTheme === "dark"
+  if (!mounted) {
+    return (
+      <Button variant="ghost" size="icon" className="rounded-full w-9 h-9">
+        <span className="sr-only">Toggle theme</span>
+        <div className="h-4 w-4 bg-muted-foreground/30 rounded-full" />
+      </Button>
+    )
+  }
 
   return (
     <Button
       variant="ghost"
       size="icon"
-      className="rounded-full relative overflow-hidden group"
-      onClick={toggleTheme}
-      aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
+      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      className="rounded-full w-9 h-9 hover:bg-muted transition-colors"
     >
-      <div className="absolute inset-0 bg-brand/10 dark:bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-full" />
-
-      {/* Electric Bolt SVG */}
-      <svg
-        viewBox="0 0 24 24"
-        className={cn("h-5 w-5 transition-all duration-300", isDark ? "text-white rotate-180" : "text-brand rotate-0")}
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M13 3L4 14H12L11 21L20 10H12L13 3Z"
-          fill="currentColor"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
+      <span className="sr-only">Toggle theme</span>
+      {theme === "dark" ? (
+        <Moon className="h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+      ) : (
+        <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+      )}
     </Button>
   )
 }

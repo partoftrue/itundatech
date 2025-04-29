@@ -30,16 +30,23 @@ export function ArticleListItem({ article, variant = "default", className }: Art
   if (variant === "featured") {
     return (
       <div className={cn("py-6 border-b", className)}>
-        <Link href={`/articles/${article.slug}`} className="flex flex-col sm:flex-row gap-4 items-start">
+        <Link href={`/articles/${article.slug}`} className="flex flex-col sm:flex-row gap-6 items-start group">
           <div className="flex-1">
-            <h2 className="text-xl sm:text-2xl font-bold mb-2 line-clamp-2">{article.title}</h2>
-            <p className="text-muted-foreground mb-3 line-clamp-2">{article.excerpt}</p>
+            <h2 className="text-xl sm:text-2xl font-medium mb-3 line-clamp-2 group-hover:text-primary transition-colors">
+              {article.title}
+            </h2>
+            <p className="text-muted-foreground mb-3 line-clamp-2 leading-relaxed">{article.excerpt}</p>
             <div className="text-sm text-muted-foreground">
               {article.date} · {article.author.name}
             </div>
           </div>
-          <div className="sm:w-32 sm:h-32 w-full h-40 relative rounded-lg overflow-hidden flex-shrink-0">
-            <Image src={article.coverImage || "/placeholder.svg"} alt={article.title} fill className="object-cover" />
+          <div className="sm:w-40 sm:h-40 w-full h-40 relative rounded-xl overflow-hidden flex-shrink-0">
+            <Image
+              src={article.coverImage || "/placeholder.svg"}
+              alt={article.title}
+              fill
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+            />
           </div>
         </Link>
       </div>
@@ -49,14 +56,21 @@ export function ArticleListItem({ article, variant = "default", className }: Art
   if (variant === "compact") {
     return (
       <div className={cn("py-4", className)}>
-        <Link href={`/articles/${article.slug}`} className="flex gap-4">
+        <Link href={`/articles/${article.slug}`} className="flex gap-4 group">
           <div className="flex-1 min-w-0">
-            <h3 className="text-base font-medium mb-1 truncate">{article.title}</h3>
+            <h3 className="text-base font-medium mb-1 truncate group-hover:text-primary transition-colors">
+              {article.title}
+            </h3>
             <div className="text-xs text-muted-foreground">{timeAgo}</div>
           </div>
           <div className="flex-shrink-0">
             <div className="relative w-16 h-16 overflow-hidden rounded-lg">
-              <Image src={article.coverImage || "/placeholder.svg"} alt={article.title} fill className="object-cover" />
+              <Image
+                src={article.coverImage || "/placeholder.svg"}
+                alt={article.title}
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
+              />
             </div>
           </div>
         </Link>
@@ -67,16 +81,23 @@ export function ArticleListItem({ article, variant = "default", className }: Art
   // Default variant - matches Toss Tech style
   return (
     <div className={cn("py-6 border-b", className)}>
-      <Link href={`/articles/${article.slug}`} className="flex flex-col sm:flex-row gap-4 items-start">
+      <Link href={`/articles/${article.slug}`} className="flex flex-col sm:flex-row gap-6 items-start group">
         <div className="flex-1">
-          <h2 className="text-xl font-bold mb-2 line-clamp-2">{article.title}</h2>
-          <p className="text-muted-foreground mb-3 line-clamp-2">{article.excerpt}</p>
+          <h2 className="text-xl font-medium mb-3 line-clamp-2 group-hover:text-primary transition-colors">
+            {article.title}
+          </h2>
+          <p className="text-muted-foreground mb-3 line-clamp-2 leading-relaxed">{article.excerpt}</p>
           <div className="text-sm text-muted-foreground">
             {article.date} · {article.author.name}
           </div>
         </div>
-        <div className="sm:w-32 sm:h-32 w-full h-40 relative rounded-lg overflow-hidden flex-shrink-0">
-          <Image src={article.coverImage || "/placeholder.svg"} alt={article.title} fill className="object-cover" />
+        <div className="sm:w-32 sm:h-32 w-full h-40 relative rounded-xl overflow-hidden flex-shrink-0">
+          <Image
+            src={article.coverImage || "/placeholder.svg"}
+            alt={article.title}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+          />
         </div>
       </Link>
     </div>
