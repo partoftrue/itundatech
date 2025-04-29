@@ -28,13 +28,22 @@ interface BookmarkedArticle {
 }
 
 export default function BookmarksPage() {
-  const { user } = useAuth()
   const router = useRouter()
   const { toast } = useToast()
   const [bookmarks, setBookmarks] = useState<BookmarkedArticle[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [isClient, setIsClient] = useState(false)
+
+  // Use a state variable to track auth status to prevent hydration issues
+  const { user } = useAuth()
+
+  // Use useEffect to safely access the auth context on the client side
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   useEffect(() => {
+    if (!isClient) return
     if (!user) {
       router.push("/auth")
       return
@@ -105,9 +114,11 @@ export default function BookmarksPage() {
     }
 
     fetchBookmarks()
-  }, [user, router])
+  }, [user, isClient, router])
 
   const removeBookmark = async (bookmarkId: string) => {
+    if (!user) return
+
     try {
       const supabase = createClientSupabaseClient()
 
@@ -132,7 +143,8 @@ export default function BookmarksPage() {
     }
   }
 
-  if (isLoading) {
+  // Show loading state until client-side code has run
+  if (!isClient || isLoading) {
     return (
       <div className="flex justify-center items-center min-h-[60vh]">
         <LoadingSpinner size="lg" />
