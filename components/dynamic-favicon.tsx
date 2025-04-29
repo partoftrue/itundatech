@@ -2,27 +2,30 @@
 
 import { useTheme } from "next-themes"
 import { useEffect, useState } from "react"
-import Head from "next/head"
 
 export function DynamicFavicon() {
-  const { resolvedTheme } = useTheme()
+  const { theme, systemTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
-  if (!mounted) return null
+  useEffect(() => {
+    if (!mounted) return
 
-  const faviconPath = resolvedTheme === "dark" ? "/favicon-dark.ico" : "/favicon.ico"
-  const iconPath = resolvedTheme === "dark" ? "/icon-dark.png" : "/icon.png"
-  const appleIconPath = resolvedTheme === "dark" ? "/apple-icon-dark.png" : "/apple-icon.png"
+    // Fix for light theme favicon
+    const currentTheme = theme === "system" ? systemTheme : theme
+    const faviconLink = document.querySelector('link[rel="icon"]') as HTMLLinkElement
 
-  return (
-    <Head>
-      <link rel="icon" href={faviconPath} sizes="any" />
-      <link rel="icon" href={iconPath} type="image/svg+xml" />
-      <link rel="apple-touch-icon" href={appleIconPath} />
-    </Head>
-  )
+    if (faviconLink) {
+      if (currentTheme === "dark") {
+        faviconLink.href = "/favicon-dark.ico"
+      } else {
+        faviconLink.href = "/favicon.ico"
+      }
+    }
+  }, [theme, systemTheme, mounted])
+
+  return null
 }

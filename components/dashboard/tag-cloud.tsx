@@ -9,12 +9,28 @@ interface Tag {
 }
 
 interface TagCloudProps {
-  tags: Tag[]
+  tags?: Tag[]
 }
 
-export function TagCloud({ tags }: TagCloudProps) {
+export function TagCloud({ tags = [] }: TagCloudProps) {
+  // Ensure tags is an array
+  const safeTags = Array.isArray(tags) ? tags : []
+
   // Filter to tags with at least one article
-  const activeTags = tags.filter((tag) => tag.articleCount > 0)
+  const activeTags = safeTags.filter((tag) => tag.articleCount > 0)
+
+  if (activeTags.length === 0) {
+    return (
+      <Card className="col-span-1">
+        <CardHeader>
+          <CardTitle>Popular Tags</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-muted-foreground">No tags available.</p>
+        </CardContent>
+      </Card>
+    )
+  }
 
   // Sort by article count (descending)
   const sortedTags = [...activeTags].sort((a, b) => b.articleCount - a.articleCount)

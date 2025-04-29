@@ -1,6 +1,6 @@
 import type { Config } from "tailwindcss"
 
-const config = {
+const config: Config = {
   darkMode: ["class"],
   content: [
     "./pages/**/*.{ts,tsx}",
@@ -9,7 +9,6 @@ const config = {
     "./src/**/*.{ts,tsx}",
     "*.{js,ts,jsx,tsx,mdx}",
   ],
-  prefix: "",
   theme: {
     container: {
       center: true,
@@ -19,6 +18,20 @@ const config = {
       },
     },
     extend: {
+      screens: {
+        xs: "375px",
+        sm: "640px",
+        md: "768px",
+        lg: "1024px",
+        xl: "1280px",
+        "2xl": "1536px",
+        tall: { raw: "(min-height: 800px)" },
+        short: { raw: "(max-height: 600px)" },
+        portrait: { raw: "(orientation: portrait)" },
+        landscape: { raw: "(orientation: landscape)" },
+        touch: { raw: "(hover: none) and (pointer: coarse)" },
+        mouse: { raw: "(hover: hover) and (pointer: fine)" },
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -63,32 +76,52 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        brand: "#1873ff", // Our brand color
-        itunda: {
-          purple: "#6C3CE9",
-          darkPurple: "#4A2899",
-          lightPurple: "#9B7AFF",
-          navy: "#1A2542",
-          lightBlue: "#F0F4FF",
-          blue: "#1873ff", // Brand blue
+        success: {
+          DEFAULT: "hsl(var(--success))",
+          foreground: "hsl(var(--success-foreground))",
+        },
+        warning: {
+          DEFAULT: "hsl(var(--warning))",
+          foreground: "hsl(var(--warning-foreground))",
+        },
+        info: {
+          DEFAULT: "hsl(var(--info))",
+          foreground: "hsl(var(--info-foreground))",
+        },
+        surface: {
+          100: "hsl(var(--surface-100))",
+          200: "hsl(var(--surface-200))",
+          300: "hsl(var(--surface-300))",
+          400: "hsl(var(--surface-400))",
+        },
+        brand: "hsl(var(--brand))",
+        toss: {
+          blue: "hsl(var(--toss-blue))",
+          navy: "hsl(var(--toss-navy))",
+        },
+        kakao: {
+          yellow: "#FEE500",
+          black: "#191919",
+        },
+        apple: {
           gray: {
-            50: "#f9fafb",
-            100: "#f3f4f6",
-            200: "#e5e7eb",
-            300: "#d1d5db",
-            400: "#9ca3af",
-            500: "#6b7280",
-            600: "#4b5563",
-            700: "#374151",
-            800: "#1f2937",
-            900: "#111827",
+            light: "#F5F5F7",
+            dark: "#1D1D1F",
           },
+          blue: "#0071E3",
         },
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      boxShadow: {
+        "toss-sm": "0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1)",
+        "toss-md": "0 4px 6px rgba(0, 0, 0, 0.05), 0 10px 15px rgba(0, 0, 0, 0.1)",
+        "toss-lg": "0 10px 25px rgba(0, 0, 0, 0.05), 0 20px 48px rgba(0, 0, 0, 0.1)",
+        "apple-card": "0 2px 5px rgba(0, 0, 0, 0.08), 0 5px 15px rgba(0, 0, 0, 0.03)",
+        "kakao-btn": "0 2px 4px rgba(0, 0, 0, 0.04)",
       },
       keyframes: {
         "accordion-down": {
@@ -99,20 +132,117 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "subtle-bounce": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-5px)" },
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
+        "pulse-light": {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.8" },
+        },
+        ripple: {
+          to: { transform: "scale(4)", opacity: "0" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "subtle-bounce": "subtle-bounce 2s ease-in-out infinite",
+        float: "float 3s ease-in-out infinite",
+        "pulse-light": "pulse-light 2s ease-in-out infinite",
+        ripple: "ripple 0.6s linear",
       },
-      fontFamily: {
-        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+      spacing: {
+        "safe-top": "env(safe-area-inset-top)",
+        "safe-bottom": "env(safe-area-inset-bottom)",
+        "safe-left": "env(safe-area-inset-left)",
+        "safe-right": "env(safe-area-inset-right)",
       },
-      maxWidth: {
-        "screen-xl": "1200px",
+      gridTemplateColumns: {
+        "responsive-1": "repeat(1, minmax(0, 1fr))",
+        "responsive-2": "repeat(auto-fit, minmax(min(100%, 20rem), 1fr))",
+        "responsive-3": "repeat(auto-fit, minmax(min(100%, 15rem), 1fr))",
+        "responsive-4": "repeat(auto-fit, minmax(min(100%, 12rem), 1fr))",
+      },
+      typography: {
+        DEFAULT: {
+          css: {
+            maxWidth: "65ch",
+            color: "hsl(var(--foreground))",
+            a: {
+              color: "hsl(var(--primary))",
+              "&:hover": {
+                color: "hsl(var(--primary) / 0.8)",
+              },
+            },
+            h1: {
+              color: "hsl(var(--foreground))",
+            },
+            h2: {
+              color: "hsl(var(--foreground))",
+            },
+            h3: {
+              color: "hsl(var(--foreground))",
+            },
+            h4: {
+              color: "hsl(var(--foreground))",
+            },
+            blockquote: {
+              borderLeftColor: "hsl(var(--muted))",
+              color: "hsl(var(--muted-foreground))",
+            },
+            hr: {
+              borderColor: "hsl(var(--border))",
+            },
+            ol: {
+              li: {
+                "&::marker": {
+                  color: "hsl(var(--muted-foreground))",
+                },
+              },
+            },
+            ul: {
+              li: {
+                "&::marker": {
+                  color: "hsl(var(--muted-foreground))",
+                },
+              },
+            },
+            strong: {
+              color: "hsl(var(--foreground))",
+            },
+            code: {
+              color: "hsl(var(--foreground))",
+              backgroundColor: "hsl(var(--muted))",
+              borderRadius: "0.25rem",
+              padding: "0.2em 0.4em",
+            },
+            pre: {
+              backgroundColor: "hsl(var(--card))",
+              borderRadius: "var(--radius)",
+              border: "1px solid hsl(var(--border))",
+            },
+            thead: {
+              borderBottomColor: "hsl(var(--border))",
+              th: {
+                color: "hsl(var(--foreground))",
+              },
+            },
+            tbody: {
+              tr: {
+                borderBottomColor: "hsl(var(--border))",
+              },
+            },
+          },
+        },
       },
     },
   },
   plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
-} satisfies Config
+}
 
 export default config

@@ -3,8 +3,7 @@
 import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { useAuth } from "@/components/auth/auth-provider"
-import { Search, Menu, X } from "lucide-react"
+import { Search, Menu } from "lucide-react"
 import { SearchDialog } from "./search-dialog"
 import { cn } from "@/lib/utils"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
@@ -22,29 +21,41 @@ import Image from "next/image"
 import { MainNav } from "./main-nav"
 import type { Category } from "@/lib/categories"
 
-interface HeaderProps {
-  categories: Category[]
+// Import useAuth with a try/catch to handle cases where AuthProvider isn't available
+let useAuth: any = () => ({ user: null, signOut: () => {} })
+try {
+  useAuth = require("./auth/auth-provider").useAuth
+} catch (error) {
+  console.warn("Auth provider not available, using fallback")
 }
 
-const navigationItems = [
-  { label: "Home", href: "/" },
-  { label: "Features", href: "/features" },
-  { label: "Pricing", href: "/pricing" },
-  { label: "Resources", href: "/resources" },
-  { label: "About Us", href: "/about" },
-  { label: "Contact", href: "/contact" },
-]
+interface HeaderProps {
+  categories?: Category[]
+}
 
-export default function Header({ categories }: HeaderProps) {
+export default function Header({ categories = [] }: HeaderProps) {
   const pathname = usePathname()
-  const { user, signOut } = useAuth()
   const [isScrolled, setIsScrolled] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-  const toggleMobileMenu = () => {
-    setMobileMenuOpen(!mobileMenuOpen)
+  // Initialize auth state outside the try/catch
+  let user = null
+  let signOut = () => {}
+
+  // Call useAuth unconditionally
+  let auth
+  try {
+    auth = useAuth()
+  } catch (error) {
+    console.warn("Error using auth context, falling back to unauthenticated state")
+    auth = { user: null, signOut: () => {} } // Provide a default value
   }
+
+  // Destructure auth object to ensure hooks are called unconditionally
+  const { user: authUser, signOut: authSignOut } = auth || { user: null, signOut: () => {} }
+
+  user = authUser
+  signOut = authSignOut
 
   useEffect(() => {
     const handleScroll = () => {
@@ -62,8 +73,8 @@ export default function Header({ categories }: HeaderProps) {
           isScrolled ? "bg-background/90 backdrop-blur-md shadow-sm border-b" : "bg-background",
         )}
       >
-        <div className="max-w-screen-xl mx-auto px-6">
-          <div className="flex h-16 items-center justify-between">
+        <div className="max-w-screen-xl mx-auto px-4 sm:px-6">
+          <div className="flex h-16 md:h-20 items-center justify-between">
             <div className="flex items-center">
               <Logo linkProps={{ href: "/" }} />
 
@@ -73,7 +84,8 @@ export default function Header({ categories }: HeaderProps) {
               </div>
             </div>
 
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 md:space-x-4">
+              {/* Theme Toggle */}
               <ThemeToggle />
 
               <Button
@@ -86,7 +98,7 @@ export default function Header({ categories }: HeaderProps) {
                 <Search className="h-5 w-5" />
               </Button>
 
-              {user ? (
+              {authUser ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
@@ -95,8 +107,8 @@ export default function Header({ categories }: HeaderProps) {
                       className="rounded-full overflow-hidden hover:bg-muted transition-colors"
                     >
                       <Image
-                        src={user.avatar_url || "/placeholder.svg?height=40&width=40&query=user avatar"}
-                        alt={user.name || "User"}
+                        src={authUser.avatar_url || "/placeholder.svg?height=40&width=40&query=user avatar"}
+                        alt={authUser.name || "User"}
                         width={32}
                         height={32}
                         className="rounded-full"
@@ -106,8 +118,8 @@ export default function Header({ categories }: HeaderProps) {
                   <DropdownMenuContent align="end" className="w-56 rounded-xl p-2">
                     <div className="flex items-center justify-start p-2">
                       <div className="flex flex-col space-y-1 leading-none">
-                        <p className="font-medium">{user.name}</p>
-                        <p className="w-[200px] truncate text-sm text-muted-foreground">{user.email}</p>
+                        <p className="font-medium">{authUser.name}</p>
+                        <p className="w-[200px] truncate text-sm text-muted-foreground">{authUser.email}</p>
                       </div>
                     </div>
                     <DropdownMenuSeparator />
@@ -126,24 +138,39 @@ export default function Header({ categories }: HeaderProps) {
                         <span>Profile</span>
                       </Link>
                     </DropdownMenuItem>
+                    <DropdownMenuItem asChild className="rounded-lg cursor-pointer">
+                      <Link href="/settings/theme" className="flex items-center">
+                        <span>Theme Settings</span>
+                      </Link>
+                    </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
                       className="rounded-lg cursor-pointer text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20"
-                      onClick={() => signOut()}
+                      onClick={() => authSignOut()}
                     >
                       <span>Log out</span>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
-                <div className="hidden lg:flex items-center gap-4">
-                  <Button variant="ghost" className="font-medium hover:text-primary transition-colors" asChild>
-                    <Link href="/auth">Sign in</Link>
-                  </Button>
-                  <Button className="rounded-full font-medium shadow-sm hover:shadow-md transition-all" asChild>
-                    <Link href="/auth?register=true">Create account</Link>
-                  </Button>
-                </div>
+                <>
+                  {/* Desktop auth buttons */}
+                  <div className="hidden md:flex items-center space-x-2">
+                    <Button variant="ghost" size="sm" className="font-medium" asChild>
+                      <Link href="/auth">Sign in</Link>
+                    </Button>
+                    <Button size="sm" className="rounded-full" asChild>
+                      <Link href="/auth?register=true">Sign up</Link>
+                    </Button>
+                  </div>
+
+                  {/* Mobile auth button */}
+                  <div className="md:hidden">
+                    <Button size="sm" className="rounded-full" asChild>
+                      <Link href="/auth">Sign in</Link>
+                    </Button>
+                  </div>
+                </>
               )}
 
               {/* Mobile Menu */}
@@ -158,23 +185,23 @@ export default function Header({ categories }: HeaderProps) {
                     <Menu className="h-5 w-5" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="right" className="w-[300px] p-6">
+                <SheetContent side="right" className="w-[85vw] max-w-[300px] p-6">
                   <div className="flex flex-col gap-6 mt-8">
                     <Link href="/" className="text-lg font-medium hover:text-brand transition-colors">
                       Home
                     </Link>
 
-                    <Link href="/authors" className="text-lg font-medium hover:text-brand transition-colors">
-                      Authors
-                    </Link>
                     <Link href="/about" className="text-lg font-medium hover:text-brand transition-colors">
                       About
                     </Link>
                     <Link href="/contact" className="text-lg font-medium hover:text-brand transition-colors">
                       Contact
                     </Link>
+                    <Link href="/settings/theme" className="text-lg font-medium hover:text-brand transition-colors">
+                      Theme Settings
+                    </Link>
 
-                    {user ? (
+                    {authUser ? (
                       <>
                         <div className="h-px bg-muted my-2"></div>
                         <Link href="/dashboard" className="text-lg font-medium hover:text-brand transition-colors">
@@ -193,7 +220,7 @@ export default function Header({ categories }: HeaderProps) {
                           Profile
                         </Link>
                         <button
-                          onClick={() => signOut()}
+                          onClick={() => authSignOut()}
                           className="text-lg font-medium text-left text-red-500 hover:text-red-600 transition-colors"
                         >
                           Log out
@@ -212,17 +239,6 @@ export default function Header({ categories }: HeaderProps) {
                   </div>
                 </SheetContent>
               </Sheet>
-
-              {/* Mobile Menu Button */}
-              <button
-                onClick={toggleMobileMenu}
-                className="lg:hidden p-2 rounded-md hover:bg-muted transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                aria-expanded={mobileMenuOpen}
-                aria-controls="mobile-menu"
-              >
-                <span className="sr-only">{mobileMenuOpen ? "Close menu" : "Open menu"}</span>
-                {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-              </button>
             </div>
           </div>
         </div>

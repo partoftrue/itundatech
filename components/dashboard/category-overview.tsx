@@ -1,6 +1,5 @@
 import Link from "next/link"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { BarChart } from "@/components/dashboard/bar-chart"
 
 interface Category {
   id: string
@@ -10,23 +9,27 @@ interface Category {
 }
 
 interface CategoryOverviewProps {
-  categories: Category[]
+  categories?: Category[]
 }
 
-export function CategoryOverview({ categories }: CategoryOverviewProps) {
-  // Sort categories by article count (descending)
-  const sortedCategories = [...categories].sort((a, b) => b.articleCount - a.articleCount)
+export function CategoryOverview({ categories = [] }: CategoryOverviewProps) {
+  // Ensure categories is an array
+  const safeCategories = Array.isArray(categories) ? categories : []
 
-  const chartData = {
-    labels: sortedCategories.map((category) => category.name),
-    datasets: [
-      {
-        label: "Articles",
-        data: sortedCategories.map((category) => category.articleCount),
-        backgroundColor: "#3b82f6",
-        borderRadius: 4,
-      },
-    ],
+  // Sort categories by article count (descending)
+  const sortedCategories = [...safeCategories].sort((a, b) => b.articleCount - a.articleCount)
+
+  if (sortedCategories.length === 0) {
+    return (
+      <Card className="col-span-1">
+        <CardHeader>
+          <CardTitle>Articles by Category</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-muted-foreground">No categories available.</p>
+        </CardContent>
+      </Card>
+    )
   }
 
   return (
@@ -35,9 +38,6 @@ export function CategoryOverview({ categories }: CategoryOverviewProps) {
         <CardTitle>Articles by Category</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="h-[300px]">
-          <BarChart data={chartData} />
-        </div>
         <div className="mt-4 space-y-2">
           {sortedCategories.map((category) => (
             <div key={category.id} className="flex items-center justify-between">

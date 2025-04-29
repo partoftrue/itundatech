@@ -7,7 +7,7 @@ import { Chart, registerables } from "chart.js"
 Chart.register(...registerables)
 
 interface BarChartProps {
-  data: {
+  data?: {
     labels: string[]
     datasets: {
       label: string
@@ -22,6 +22,19 @@ export function BarChart({ data }: BarChartProps) {
   const chartRef = useRef<HTMLCanvasElement>(null)
   const chartInstance = useRef<Chart | null>(null)
 
+  // Default empty data if none provided
+  const safeData = data || {
+    labels: [],
+    datasets: [
+      {
+        label: "No Data",
+        data: [],
+        backgroundColor: "#3b82f6",
+        borderRadius: 4,
+      },
+    ],
+  }
+
   useEffect(() => {
     if (!chartRef.current) return
 
@@ -35,7 +48,7 @@ export function BarChart({ data }: BarChartProps) {
     if (ctx) {
       chartInstance.current = new Chart(ctx, {
         type: "bar",
-        data,
+        data: safeData,
         options: {
           responsive: true,
           maintainAspectRatio: false,
@@ -62,7 +75,7 @@ export function BarChart({ data }: BarChartProps) {
         chartInstance.current.destroy()
       }
     }
-  }, [data])
+  }, [safeData])
 
   return <canvas ref={chartRef} />
 }
