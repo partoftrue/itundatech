@@ -11,18 +11,9 @@ import {
 import { Monitor, Moon, Sun } from "lucide-react"
 import { useThemePreference } from "@/hooks/use-theme-preference"
 import { cn } from "@/lib/utils"
-import { useEffect } from "react"
 
 export function ThemePreferences() {
   const { theme, setTheme, hasStoredPreference, resetToSystemPreference, mounted } = useThemePreference()
-
-  // Fix for light theme not applying correctly
-  useEffect(() => {
-    if (mounted && theme === "light") {
-      document.documentElement.classList.remove("dark")
-      document.documentElement.setAttribute("data-theme", "light")
-    }
-  }, [mounted, theme])
 
   if (!mounted) return null
 

@@ -8,12 +8,7 @@ interface DashboardStatsProps {
   userCount: number
 }
 
-export function DashboardStats({
-  articleCount = 0,
-  categoryCount = 0,
-  tagCount = 0,
-  userCount = 0,
-}: DashboardStatsProps) {
+export function DashboardStats({ articleCount, categoryCount, tagCount, userCount }: DashboardStatsProps) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <Card>

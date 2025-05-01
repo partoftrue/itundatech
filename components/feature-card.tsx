@@ -43,22 +43,11 @@ export function FeatureCard({ title, description, icon, className, index = 0 }: 
   return (
     <motion.div
       {...buttonHover}
-      className={cn(
-        "p-4 sm:p-6 rounded-xl sm:rounded-2xl border shadow-sm transition-all duration-300 hover:shadow-md",
-        bgColor,
-        className,
-      )}
+      className={cn("p-6 rounded-2xl border shadow-sm transition-all duration-300 hover:shadow-md", bgColor, className)}
     >
-      <div
-        className={cn(
-          "w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center mb-3 sm:mb-4",
-          iconBgColor,
-        )}
-      >
-        {icon}
-      </div>
-      <h3 className="text-lg sm:text-xl font-semibold mb-2">{title}</h3>
-      <p className="text-sm sm:text-base text-muted-foreground">{description}</p>
+      <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center mb-4", iconBgColor)}>{icon}</div>
+      <h3 className="text-xl font-semibold mb-2">{title}</h3>
+      <p className="text-muted-foreground">{description}</p>
     </motion.div>
   )
 }

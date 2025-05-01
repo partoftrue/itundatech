@@ -2,8 +2,45 @@ import Link from "next/link"
 import { Logo } from "./logo"
 import { NewsletterSubscription } from "./newsletter-subscription"
 import { getAllCategories } from "@/lib/categories"
-import { ResponsiveContainer } from "./ui/responsive-container"
-import { ResponsiveGrid } from "./ui/responsive-grid"
+
+const footerLinks = [
+  {
+    title: "Product",
+    links: [
+      { label: "Features", href: "/features" },
+      { label: "Pricing", href: "/pricing" },
+      { label: "Roadmap", href: "/roadmap" },
+      { label: "Changelog", href: "/changelog" },
+    ],
+  },
+  {
+    title: "Resources",
+    links: [
+      { label: "Documentation", href: "/docs" },
+      { label: "Tutorials", href: "/tutorials" },
+      { label: "Case Studies", href: "/case-studies" },
+      { label: "Help Center", href: "/help" },
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      { label: "About Us", href: "/about" },
+      { label: "Careers", href: "/careers" },
+      { label: "Contact", href: "/contact" },
+      { label: "Blog", href: "/blog" },
+    ],
+  },
+  {
+    title: "Legal",
+    links: [
+      { label: "Privacy Policy", href: "/privacy" },
+      { label: "Terms of Service", href: "/terms" },
+      { label: "Cookie Policy", href: "/cookies" },
+      { label: "Security", href: "/security" },
+    ],
+  },
+]
 
 export async function Footer() {
   const currentYear = new Date().getFullYear()
@@ -14,10 +51,10 @@ export async function Footer() {
 
   return (
     <footer className="border-t mt-24">
-      <ResponsiveContainer className="py-12 md:py-16">
-        <ResponsiveGrid cols={{ xs: 1, sm: 2, md: 2, lg: 4 }} gap={{ xs: 8, md: 10 }}>
+      <div className="max-w-screen-xl mx-auto px-6 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           {/* Logo and Description */}
-          <div>
+          <div className="md:col-span-1">
             <Logo linkProps={{ href: "/" }} />
             <p className="mt-4 text-muted-foreground leading-relaxed">
               A community-driven platform for developers, designers, and tech enthusiasts.
@@ -25,7 +62,7 @@ export async function Footer() {
           </div>
 
           {/* Categories */}
-          <div>
+          <div className="md:col-span-1">
             <h3 className="font-medium text-lg mb-4">Categories</h3>
             <ul className="space-y-3">
               {topCategories.map((category) => (
@@ -47,7 +84,7 @@ export async function Footer() {
           </div>
 
           {/* Important Links */}
-          <div>
+          <div className="md:col-span-1">
             <h3 className="font-medium text-lg mb-4">Important Links</h3>
             <ul className="space-y-3">
               <li>
@@ -74,14 +111,14 @@ export async function Footer() {
           </div>
 
           {/* Newsletter */}
-          <div>
+          <div className="md:col-span-1">
             <h3 className="font-medium text-lg mb-4">Subscribe to our newsletter</h3>
             <NewsletterSubscription />
           </div>
-        </ResponsiveGrid>
+        </div>
 
         {/* Bottom Section */}
-        <div className="mt-12 pt-8 border-t flex flex-col md:flex-row justify-between items-center">
+        <div className="mt-16 pt-8 border-t flex flex-col md:flex-row justify-between items-center">
           <p className="text-sm text-muted-foreground">© {currentYear} Itunda Tech. All rights reserved.</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
@@ -95,7 +132,7 @@ export async function Footer() {
             </a>
           </div>
         </div>
-      </ResponsiveContainer>
+      </div>
     </footer>
   )
 }

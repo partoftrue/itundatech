@@ -71,9 +71,9 @@
     "@tiptap/extension-placeholder": "latest",
     "remark": "latest",
     "remark-html": "latest",
+    "chart.js": "latest",
     "framer-motion": "latest",
     "uuid": "latest",
-    "chart.js": "latest",
     "@tailwindcss/typography": "latest"
   },
   "devDependencies": {

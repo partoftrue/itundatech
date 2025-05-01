@@ -24,68 +24,42 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [session, setSession] = useState<Session | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const [supabase, setSupabase] = useState<any>(null)
-
-  // Initialize Supabase client only on the client side
-  useEffect(() => {
-    const client = createClientSupabaseClient()
-    setSupabase(client)
-  }, [])
+  const supabase = createClientSupabaseClient()
 
   useEffect(() => {
-    if (!supabase) return
-
     const getSession = async () => {
-      try {
-        const {
-          data: { session },
-        } = await supabase.auth.getSession()
-        setSession(session)
-        setUser(session?.user ?? null)
-      } catch (error) {
-        console.error("Error getting session:", error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    getSession()
-
-    try {
-      const {
-        data: { subscription },
-      } = supabase.auth.onAuthStateChange((_event, session) => {
-        setSession(session)
-        setUser(session?.user ?? null)
-        setIsLoading(false)
-      })
-
-      return () => {
-        subscription?.unsubscribe()
-      }
-    } catch (error) {
-      console.error("Error setting up auth state change listener:", error)
-      setIsLoading(false)
-    }
-  }, [supabase])
-
-  const refreshUser = async () => {
-    if (!supabase) return
-
-    try {
       const {
         data: { session },
       } = await supabase.auth.getSession()
       setSession(session)
       setUser(session?.user ?? null)
-    } catch (error) {
-      console.error("Error refreshing user:", error)
+      setIsLoading(false)
     }
+
+    getSession()
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+      setUser(session?.user ?? null)
+      setIsLoading(false)
+    })
+
+    return () => {
+      subscription.unsubscribe()
+    }
+  }, [supabase.auth])
+
+  const refreshUser = async () => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession()
+    setSession(session)
+    setUser(session?.user ?? null)
   }
 
   const signIn = async (email: string, password: string) => {
-    if (!supabase) throw new Error("Supabase client not initialized")
-
     const { error, data } = await supabase.auth.signInWithPassword({ email, password })
 
     if (error) throw error
@@ -97,8 +71,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const signUp = async (email: string, password: string, name: string) => {
-    if (!supabase) throw new Error("Supabase client not initialized")
-
     const { error, data } = await supabase.auth.signUp({
       email,
       password,
@@ -125,15 +97,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const signOut = async () => {
-    if (!supabase) throw new Error("Supabase client not initialized")
-
     const { error } = await supabase.auth.signOut()
     if (error) throw error
   }
 
   const resendVerificationEmail = async (email: string) => {
-    if (!supabase) throw new Error("Supabase client not initialized")
-
     const { error } = await supabase.auth.resend({
       type: "signup",
       email,
@@ -146,8 +114,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const resetPassword = async (email: string) => {
-    if (!supabase) throw new Error("Supabase client not initialized")
-
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/auth/update-password`,
     })

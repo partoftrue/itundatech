@@ -24,26 +24,10 @@ interface Article {
 }
 
 interface RecentArticlesProps {
-  articles?: Article[]
+  articles: Article[]
 }
 
-export function RecentArticles({ articles = [] }: RecentArticlesProps) {
-  // Ensure articles is an array
-  const safeArticles = Array.isArray(articles) ? articles : []
-
-  if (safeArticles.length === 0) {
-    return (
-      <Card className="mt-8">
-        <CardHeader>
-          <CardTitle>Recent Articles</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground">No recent articles available.</p>
-        </CardContent>
-      </Card>
-    )
-  }
-
+export function RecentArticles({ articles }: RecentArticlesProps) {
   return (
     <Card className="mt-8">
       <CardHeader>
@@ -51,7 +35,7 @@ export function RecentArticles({ articles = [] }: RecentArticlesProps) {
       </CardHeader>
       <CardContent>
         <div className="space-y-6">
-          {safeArticles.map((article) => (
+          {articles.map((article) => (
             <div key={article.id} className="flex flex-col md:flex-row gap-4">
               <div className="w-full md:w-1/4 h-40 rounded-md overflow-hidden">
                 <img

@@ -1,18 +1,23 @@
 "use client"
 
-import { Moon, Sun } from "lucide-react"
+import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
-import { useThemeContext } from "@/contexts/theme-context"
+import { Moon, Sun } from "lucide-react"
+import { useEffect, useState } from "react"
 
 export function ThemeToggle() {
-  const { mode, toggleMode, isLoaded } = useThemeContext()
+  const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
 
-  if (!isLoaded) {
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
     return (
-      <Button variant="ghost" size="icon" className="rounded-full">
+      <Button variant="ghost" size="icon" className="rounded-full w-9 h-9">
         <span className="sr-only">Toggle theme</span>
-        <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-        <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+        <div className="h-4 w-4 bg-muted-foreground/30 rounded-full" />
       </Button>
     )
   }
@@ -21,14 +26,15 @@ export function ThemeToggle() {
     <Button
       variant="ghost"
       size="icon"
-      onClick={toggleMode}
-      className="rounded-full relative overflow-hidden group"
-      aria-label={`Switch to ${mode === "dark" ? "light" : "dark"} mode`}
+      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      className="rounded-full w-9 h-9 hover:bg-muted transition-colors"
     >
       <span className="sr-only">Toggle theme</span>
-      <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-full" />
-      <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-      <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+      {theme === "dark" ? (
+        <Moon className="h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+      ) : (
+        <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+      )}
     </Button>
   )
 }

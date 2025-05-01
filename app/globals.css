@@ -4,341 +4,322 @@
 
 @layer base {
   :root {
-    /* Light theme variables (default) - Inspired by Toss, Kakao, Apple */
     --background: 0 0% 100%;
-    --foreground: 222 47% 11%;
-
-    /* Card colors */
+    --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
-
-    /* Popover colors */
+    --card-foreground: 240 10% 3.9%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
-
-    /* Primary colors - Clean blue inspired by Toss */
-    --primary: 214 100% 52%;
-    --primary-foreground: 0 0% 100%;
-
-    /* Secondary colors - Subtle gray */
-    --secondary: 210 20% 98%;
-    --secondary-foreground: 222 47% 11%;
-
-    /* Muted colors */
-    --muted: 210 20% 96%;
-    --muted-foreground: 215 16% 47%;
-
-    /* Accent colors */
-    --accent: 210 20% 96%;
-    --accent-foreground: 222 47% 11%;
-
-    /* Destructive colors */
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 210 20% 98%;
-
-    /* Border and input colors */
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 214 100% 52%;
-
-    /* Radius and brand colors */
-    --radius: 0.75rem;
-    --brand: 214 100% 52%;
-    --toss-blue: 214 100% 52%;
-    --toss-navy: 222 47% 11%;
-
-    /* Success colors */
-    --success: 142 71% 45%;
-    --success-foreground: 0 0% 100%;
-
-    /* Warning colors */
-    --warning: 38 92% 50%;
-    --warning-foreground: 0 0% 100%;
-
-    /* Info colors */
-    --info: 214 100% 52%;
-    --info-foreground: 0 0% 100%;
-
-    /* Surface colors for layering */
-    --surface-100: 0 0% 100%;
-    --surface-200: 210 20% 98%;
-    --surface-300: 210 20% 96%;
-    --surface-400: 214 32% 91%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 221 83% 53%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 221 83% 53%;
+    --radius: 1rem;
+    --brand: 221 83% 53%;
+    --toss-blue: 221 83% 53%;
+    --toss-navy: 221 83% 20%;
   }
 
   .dark {
-    /* Dark theme variables - Inspired by Toss, Kakao, Apple dark modes */
-    --background: 222 47% 11%;
-    --foreground: 210 20% 98%;
-
-    /* Card colors */
-    --card: 222 47% 11%;
-    --card-foreground: 210 20% 98%;
-
-    /* Popover colors */
-    --popover: 222 47% 11%;
-    --popover-foreground: 210 20% 98%;
-
-    /* Primary colors - Vibrant blue that works well in dark mode */
-    --primary: 213 94% 68%;
-    --primary-foreground: 222 47% 11%;
-
-    /* Secondary colors */
-    --secondary: 217 33% 17%;
-    --secondary-foreground: 210 20% 98%;
-
-    /* Muted colors */
-    --muted: 217 33% 17%;
-    --muted-foreground: 215 20% 65%;
-
-    /* Accent colors */
-    --accent: 217 33% 17%;
-    --accent-foreground: 210 20% 98%;
-
-    /* Destructive colors */
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 210 20% 98%;
-
-    /* Border and input colors */
-    --border: 217 33% 17%;
-    --input: 217 33% 17%;
-    --ring: 213 94% 68%;
-
-    /* Brand colors */
-    --brand: 213 94% 68%;
-    --toss-blue: 213 94% 68%;
-    --toss-navy: 222 47% 11%;
-
-    /* Success colors */
-    --success: 142 71% 45%;
-    --success-foreground: 222 47% 11%;
-
-    /* Warning colors */
-    --warning: 38 92% 50%;
-    --warning-foreground: 222 47% 11%;
-
-    /* Info colors */
-    --info: 213 94% 68%;
-    --info-foreground: 222 47% 11%;
-
-    /* Surface colors for layering */
-    --surface-100: 222 47% 11%;
-    --surface-200: 223 47% 14%;
-    --surface-300: 223 47% 17%;
-    --surface-400: 224 47% 20%;
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 221 83% 53%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 221 83% 53%;
+    --brand: 221 83% 53%;
+    --toss-blue: 221 83% 53%;
+    --toss-navy: 221 83% 20%;
   }
 }
 
-/* Base styles */
-body {
-  @apply bg-background text-foreground;
-  font-feature-settings: "rlig" 1, "calt" 1;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-medium tracking-tight;
+  }
+  .toss-container {
+    @apply max-w-screen-xl mx-auto px-4 sm:px-6;
+  }
+  .prose {
+    @apply max-w-none;
+  }
+  .prose a {
+    @apply text-brand no-underline hover:underline font-normal;
+  }
+  .prose h2,
+  .prose h3,
+  .prose h4 {
+    @apply font-medium mt-8 mb-4;
+  }
+  .prose img {
+    @apply rounded-lg;
+  }
+  .prose code {
+    @apply text-brand bg-brand/5 px-1 py-0.5 rounded;
+  }
+  .prose blockquote {
+    @apply border-l-4 border-brand/20 pl-4 italic;
+  }
+  .prose ul,
+  .prose ol {
+    @apply my-4;
+  }
+  .prose table {
+    @apply rounded-lg overflow-hidden border-collapse;
+  }
+  .prose thead {
+    @apply bg-muted;
+  }
+  .prose th,
+  .prose td {
+    @apply p-3 border border-border;
+  }
 }
 
-/* Improved focus styles for accessibility */
-:focus-visible {
-  outline: 2px solid hsl(var(--primary));
-  outline-offset: 2px;
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
-/* Enhanced scrollbar styling */
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s ease-out forwards;
+}
+
+.animate-slide-down {
+  animation: slideDown 0.5s ease-out forwards;
+}
+
+/* Staggered animations for lists */
+.stagger-animation > *:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.stagger-animation > *:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.stagger-animation > *:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.stagger-animation > *:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.stagger-animation > *:nth-child(5) {
+  animation-delay: 0.5s;
+}
+.stagger-animation > *:nth-child(6) {
+  animation-delay: 0.6s;
+}
+.stagger-animation > *:nth-child(7) {
+  animation-delay: 0.7s;
+}
+.stagger-animation > *:nth-child(8) {
+  animation-delay: 0.8s;
+}
+.stagger-animation > *:nth-child(9) {
+  animation-delay: 0.9s;
+}
+.stagger-animation > *:nth-child(10) {
+  animation-delay: 1s;
+}
+
+/* Smooth transitions */
+.transition-all {
+  transition-duration: 0.3s;
+}
+
+/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background-color: hsl(var(--surface-200));
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: hsl(var(--muted-foreground) / 0.3);
+  background: hsl(var(--muted-foreground) / 0.3);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: hsl(var(--muted-foreground) / 0.5);
+  background: hsl(var(--muted-foreground) / 0.5);
 }
 
-/* Apple-inspired text selection */
-::selection {
-  background-color: hsl(var(--primary) / 0.2);
-  color: hsl(var(--primary));
+/* Focus styles */
+*:focus-visible {
+  @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
 }
 
-/* Enhanced button styles */
-.btn-primary {
-  @apply bg-primary text-primary-foreground hover:bg-primary/90 transition-colors;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+/* Enhanced Typography */
+@layer base {
+  body {
+    @apply text-base leading-relaxed;
+    font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1, "ss03" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-medium tracking-tight text-foreground;
+    letter-spacing: -0.02em;
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl leading-tight;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl leading-tight;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl leading-snug;
+  }
+
+  h4 {
+    @apply text-xl md:text-2xl;
+  }
+
+  p {
+    @apply mb-4 max-w-prose;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
 }
 
-.btn-secondary {
-  @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors;
-}
-
-/* Card styles inspired by Toss */
-.card-toss {
-  @apply bg-card rounded-xl border border-border p-6;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.card-toss:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 10px 15px rgba(0, 0, 0, 0.1);
-}
-
-/* Apple-inspired input styles */
-.input-apple {
-  @apply bg-background border border-input rounded-lg px-4 py-2 text-foreground;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.input-apple:focus {
-  @apply border-primary;
-  box-shadow: 0 0 0 2px hsl(var(--primary) / 0.2);
-}
-
-/* Kakao-inspired accent elements */
-.accent-kakao {
-  @apply bg-warning text-warning-foreground font-medium;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-}
-
-/* Toss-inspired badges */
-.badge-toss {
-  @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
-  background: linear-gradient(to right, hsl(var(--primary)), hsl(var(--primary) / 0.8));
-  color: hsl(var(--primary-foreground));
-}
-
-/* Custom responsive utilities */
+/* Enhanced Interactions */
 @layer utilities {
-  /* Use real viewport height on mobile */
-  .h-screen-real {
-    height: 100vh; /* Fallback */
-    height: calc(var(--vh, 1vh) * 100);
+  .hover-lift {
+    @apply transition-all duration-300;
   }
 
-  /* Responsive text sizes */
-  .text-responsive-xs {
-    font-size: clamp(0.75rem, 2vw, 0.875rem);
+  .hover-lift:hover {
+    transform: translateY(-4px);
+    @apply shadow-md;
   }
 
-  .text-responsive-sm {
-    font-size: clamp(0.875rem, 2.5vw, 1rem);
+  .hover-glow:hover {
+    @apply shadow-[0_0_15px_rgba(24,115,255,0.3)];
   }
 
-  .text-responsive-base {
-    font-size: clamp(1rem, 3vw, 1.125rem);
+  .pulse-on-hover:hover {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 
-  .text-responsive-lg {
-    font-size: clamp(1.125rem, 3.5vw, 1.25rem);
+  @keyframes pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.8;
+    }
   }
 
-  .text-responsive-xl {
-    font-size: clamp(1.25rem, 4vw, 1.5rem);
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background;
   }
 
-  .text-responsive-2xl {
-    font-size: clamp(1.5rem, 5vw, 1.875rem);
-  }
-
-  .text-responsive-3xl {
-    font-size: clamp(1.875rem, 6vw, 2.25rem);
-  }
-
-  .text-responsive-4xl {
-    font-size: clamp(2.25rem, 7vw, 3rem);
-  }
-
-  .text-responsive-5xl {
-    font-size: clamp(3rem, 8vw, 3.75rem);
-  }
-
-  /* Responsive spacing */
-  .p-responsive-sm {
-    padding: clamp(0.5rem, 2vw, 1rem);
-  }
-
-  .p-responsive-md {
-    padding: clamp(1rem, 3vw, 1.5rem);
-  }
-
-  .p-responsive-lg {
-    padding: clamp(1.5rem, 4vw, 2rem);
-  }
-
-  .m-responsive-sm {
-    margin: clamp(0.5rem, 2vw, 1rem);
-  }
-
-  .m-responsive-md {
-    margin: clamp(1rem, 3vw, 1.5rem);
-  }
-
-  .m-responsive-lg {
-    margin: clamp(1.5rem, 4vw, 2rem);
-  }
-
-  /* Responsive gaps */
-  .gap-responsive-sm {
-    gap: clamp(0.5rem, 2vw, 1rem);
-  }
-
-  .gap-responsive-md {
-    gap: clamp(1rem, 3vw, 1.5rem);
-  }
-
-  .gap-responsive-lg {
-    gap: clamp(1.5rem, 4vw, 2rem);
-  }
-
-  /* Touch-friendly targets */
-  .touch-target {
-    min-height: 44px;
-    min-width: 44px;
+  .interactive-card {
+    @apply transition-all duration-300 hover:shadow-md hover:-translate-y-1;
   }
 }
 
-/* Glass effect inspired by Apple */
-.glass {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+/* Improved Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
 }
 
-.dark .glass {
-  background: rgba(17, 24, 39, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
 }
 
-/* Subtle animations */
-@keyframes subtle-fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+::-webkit-scrollbar-thumb {
+  @apply bg-muted-foreground/20 rounded-full;
 }
 
-.animate-subtle-fade-in {
-  animation: subtle-fade-in 0.5s ease forwards;
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-muted-foreground/40;
 }
 
-/* Ripple effect for buttons */
-@keyframes ripple {
-  to {
-    transform: scale(4);
-    opacity: 0;
-  }
-}
-
-.animate-ripple {
-  animation: ripple 0.6s linear;
+/* Text Selection */
+::selection {
+  @apply bg-primary/20 text-foreground;
 }

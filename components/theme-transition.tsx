@@ -1,35 +1,62 @@
 "use client"
 
-import { useEffect } from "react"
-import { useTheme } from "next-themes"
+import { useEffect, useState } from "react"
+import { cn } from "@/lib/utils"
+import { useThemePreference } from "@/hooks/use-theme-preference"
 
 export function ThemeTransition() {
-  const { theme, resolvedTheme } = useTheme()
+  const { resolvedTheme, theme, mounted } = useThemePreference()
+  const [transitioning, setTransitioning] = useState(false)
+  const [prevTheme, setPrevTheme] = useState<string | undefined>(undefined)
 
+  // Handle theme changes
   useEffect(() => {
-    // Add transition styles when theme changes
-    const transitionStyles = document.createElement("style")
-    transitionStyles.appendChild(
-      document.createTextNode(`
-        * {
-          transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, fill 0.3s ease, stroke 0.3s ease !important;
-        }
-      `),
-    )
-    document.head.appendChild(transitionStyles)
+    if (!mounted) return
 
-    // Remove transition after they've completed
-    const timeout = setTimeout(() => {
-      document.head.removeChild(transitionStyles)
-    }, 300)
-
-    return () => {
-      clearTimeout(timeout)
-      if (document.head.contains(transitionStyles)) {
-        document.head.removeChild(transitionStyles)
-      }
+    if (prevTheme && prevTheme !== theme) {
+      setTransitioning(true)
+      const timer = setTimeout(() => {
+        setTransitioning(false)
+      }, 500) // Match this with the CSS transition duration
+      return () => clearTimeout(timer)
     }
-  }, [theme, resolvedTheme])
 
-  return null
+    setPrevTheme(theme)
+  }, [theme, prevTheme, mounted])
+
+  if (!mounted) return null
+
+  const isDark = resolvedTheme === "dark"
+
+  return (
+    <div
+      className={cn(
+        "fixed inset-0 z-[100] pointer-events-none transition-opacity duration-500",
+        transitioning ? "opacity-100" : "opacity-0",
+        isDark ? "bg-gray-900" : "bg-white",
+      )}
+    >
+      <div className="absolute inset-0 flex items-center justify-center">
+        {/* Electric Bolt SVG */}
+        <svg
+          viewBox="0 0 24 24"
+          className={cn(
+            "h-16 w-16 transition-transform duration-500",
+            isDark ? "text-white scale-110 rotate-180" : "text-brand scale-100 rotate-0",
+          )}
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M13 3L4 14H12L11 21L20 10H12L13 3Z"
+            fill="currentColor"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </div>
+    </div>
+  )
 }
