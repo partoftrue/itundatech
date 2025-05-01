@@ -13,6 +13,7 @@ import { NewsletterSubscription } from "@/components/newsletter-subscription"
 import { RelatedArticles } from "@/components/related-articles"
 import { ArticleComments } from "@/components/article-comments"
 import { ImageZoom } from "@/components/image-zoom"
+import { ClientOnly } from "@/components/client-only"
 
 // This would normally come from a CMS or API
 const getArticleData = (slug: string) => {
@@ -59,7 +60,9 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
 
   return (
     <PageTransition>
-      <ReadingProgress />
+      <ClientOnly>
+        <ReadingProgress />
+      </ClientOnly>
       <div className="flex flex-col min-h-screen">
         <CategoryTabs />
 
@@ -106,13 +109,15 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5, delay: 0.2 }}
                 >
-                  <ImageZoom
-                    src={article.image || "/placeholder.svg"}
-                    alt={article.title}
-                    width={800}
-                    height={450}
-                    priority
-                  />
+                  <ClientOnly>
+                    <ImageZoom
+                      src={article.image || "/placeholder.svg"}
+                      alt={article.title}
+                      width={800}
+                      height={450}
+                      priority
+                    />
+                  </ClientOnly>
                 </motion.div>
 
                 <motion.div
@@ -123,11 +128,17 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
                   transition={{ duration: 0.5, delay: 0.4 }}
                 />
 
-                <NewsletterSubscription />
+                <ClientOnly>
+                  <NewsletterSubscription />
+                </ClientOnly>
 
-                <RelatedArticles currentSlug={params.slug} category={article.category} />
+                <ClientOnly>
+                  <RelatedArticles currentSlug={params.slug} category={article.category} />
+                </ClientOnly>
 
-                <ArticleComments />
+                <ClientOnly>
+                  <ArticleComments />
+                </ClientOnly>
 
                 <motion.div
                   className="mt-12 pt-8 border-t"
@@ -157,7 +168,9 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
 
               <div className="hidden lg:block">
                 <div className="sticky top-24">
-                  <TableOfContents />
+                  <ClientOnly>
+                    <TableOfContents />
+                  </ClientOnly>
                 </div>
               </div>
             </div>

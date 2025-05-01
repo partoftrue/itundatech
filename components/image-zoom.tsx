@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { cn } from "@/lib/utils"
@@ -17,6 +17,27 @@ interface ImageZoomProps {
 
 export function ImageZoom({ src, alt, width, height, className, priority = false }: ImageZoomProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  // Basic image without zoom functionality on server
+  if (!isMounted) {
+    return (
+      <div className={cn("relative overflow-hidden rounded-lg", className)}>
+        <Image
+          src={src || "/placeholder.svg"}
+          alt={alt}
+          width={width}
+          height={height}
+          className="transition-transform duration-300"
+          priority={priority}
+        />
+      </div>
+    )
+  }
 
   return (
     <>

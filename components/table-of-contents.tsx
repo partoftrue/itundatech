@@ -13,8 +13,11 @@ interface Heading {
 export function TableOfContents() {
   const [headings, setHeadings] = useState<Heading[]>([])
   const [activeId, setActiveId] = useState<string>("")
+  const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
+    setIsMounted(true)
+
     // Find all headings in the article
     const articleHeadings = Array.from(document.querySelectorAll("h2, h3, h4"))
       .filter((el) => el.id) // Only include headings with IDs
@@ -46,7 +49,8 @@ export function TableOfContents() {
     return () => observer.disconnect()
   }, [])
 
-  if (headings.length === 0) return null
+  // Don't render anything on server or if no headings
+  if (!isMounted || headings.length === 0) return null
 
   return (
     <motion.div

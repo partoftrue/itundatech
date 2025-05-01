@@ -5,12 +5,11 @@ import "./globals.css"
 import Header from "@/components/header"
 import { Footer } from "@/components/footer"
 import { ThemeProvider } from "@/components/theme-provider"
-import PWAInstallPrompt from "@/components/pwa-install-prompt"
-import NetworkStatus from "@/components/network-status"
 import { Toaster } from "@/components/ui/toaster"
-import { ScrollToTop } from "@/components/scroll-to-top"
-import { FloatingActionButton } from "@/components/floating-action-button"
+import { ClientOnly } from "@/components/client-only"
 import { ToastInitializer } from "@/components/toast-initializer"
+import { FloatingActionButton } from "@/components/floating-action-button"
+import { ScrollToTop } from "@/components/scroll-to-top"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -68,14 +67,23 @@ export default function RootLayout({
             <main className="flex-1">{children}</main>
             <Footer />
           </div>
-          <PWAInstallPrompt />
-          <NetworkStatus />
-          <ScrollToTop />
-          <FloatingActionButton />
+          <ClientOnly>
+            <PWAAndNetworkComponents />
+          </ClientOnly>
           <Toaster />
           <ToastInitializer />
         </ThemeProvider>
       </body>
     </html>
+  )
+}
+
+// Separate component for browser-only features
+function PWAAndNetworkComponents() {
+  return (
+    <>
+      <FloatingActionButton />
+      <ScrollToTop />
+    </>
   )
 }

@@ -10,8 +10,12 @@ export function FloatingActionButton() {
   const [isOpen, setIsOpen] = useState(false)
   const [isVisible, setIsVisible] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
+  const [isMounted, setIsMounted] = useState(false)
 
+  // Only run on client
   useEffect(() => {
+    setIsMounted(true)
+
     const handleScroll = () => {
       // Hide when scrolling down, show when scrolling up
       if (window.scrollY > lastScrollY + 10) {
@@ -26,6 +30,9 @@ export function FloatingActionButton() {
     window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
   }, [lastScrollY])
+
+  // Don't render anything on server
+  if (!isMounted) return null
 
   const handleSearch = () => {
     // This would typically open the search dialog

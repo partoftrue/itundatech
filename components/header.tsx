@@ -2,20 +2,15 @@
 
 import Link from "next/link"
 import { ThemeToggle } from "@/components/theme-toggle"
-import ThemeFavicon from "@/components/theme-favicon"
-import PWARegister from "@/components/pwa-register"
-import NotificationManager from "@/components/notification-manager"
-import NotificationCenter from "@/components/notification-center"
 import { SearchDialog } from "@/components/search-dialog"
 import { motion } from "framer-motion"
 import { Logo, LogoWithText } from "@/components/logo"
 import { MobileNav } from "@/components/mobile-nav"
+import { ClientOnly } from "@/components/client-only"
 
 export default function Header() {
   return (
     <header className="sticky top-0 z-50 w-full bg-background border-b">
-      <ThemeFavicon />
-      <PWARegister />
       <div className="container flex h-16 items-center justify-between px-4 md:px-6">
         <motion.div
           className="flex items-center gap-2"
@@ -39,13 +34,22 @@ export default function Header() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <NotificationCenter />
-          <NotificationManager />
-          <ThemeToggle />
-          <SearchDialog />
-          <MobileNav />
+          <ClientOnly>
+            <HeaderClientComponents />
+          </ClientOnly>
         </motion.div>
       </div>
     </header>
+  )
+}
+
+// Separate component for browser-only features
+function HeaderClientComponents() {
+  return (
+    <>
+      <ThemeToggle />
+      <SearchDialog />
+      <MobileNav />
+    </>
   )
 }
