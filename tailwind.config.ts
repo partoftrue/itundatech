@@ -28,16 +28,6 @@ const config = {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
-          50: "#f0f7ff",
-          100: "#e0eefe",
-          200: "#bae0fd",
-          300: "#7cc8fb",
-          400: "#36aaf5",
-          500: "#1890e0",
-          600: "#1873ff", // Our brand blue
-          700: "#0e59c7",
-          800: "#1248a2",
-          900: "#153d85",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -63,26 +53,12 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        brand: "#1873ff", // Our brand color
         itunda: {
           purple: "#6C3CE9",
           darkPurple: "#4A2899",
           lightPurple: "#9B7AFF",
           navy: "#1A2542",
           lightBlue: "#F0F4FF",
-          blue: "#1873ff", // Brand blue
-          gray: {
-            50: "#f9fafb",
-            100: "#f3f4f6",
-            200: "#e5e7eb",
-            300: "#d1d5db",
-            400: "#9ca3af",
-            500: "#6b7280",
-            600: "#4b5563",
-            700: "#374151",
-            800: "#1f2937",
-            900: "#111827",
-          },
         },
       },
       borderRadius: {

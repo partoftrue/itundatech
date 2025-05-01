@@ -1,16 +1,12 @@
 import { createServerSupabaseClient } from "./supabase"
-import { remark } from "remark"
-import html from "remark-html"
 
 export async function getArticles({
   limit = 6,
   category = null,
-  tag = null,
   published = true,
 }: {
   limit?: number
   category?: string | null
-  tag?: string | null
   published?: boolean
 } = {}) {
   const supabase = createServerSupabaseClient()
@@ -38,10 +34,6 @@ export async function getArticles({
     query = query.eq("categories.slug", category)
   }
 
-  if (tag) {
-    query = query.eq("article_tags.tags.slug", tag)
-  }
-
   const { data, error } = await query
 
   if (error) {
@@ -60,7 +52,7 @@ export async function getArticles({
       month: "short",
       day: "numeric",
     }),
-    readTime: `${article.read_time || 5} min read`,
+    readTime: article.read_time || 5,
     category: article.categories?.name || "Uncategorized",
     categorySlug: article.categories?.slug || "uncategorized",
     author: {
@@ -113,17 +105,12 @@ export async function getArticleBySlug(slug: string) {
 
   const tags = tagData?.map((item) => item.tags) || []
 
-  // Process markdown content to HTML
-  const processedContent = await remark().use(html).process(data.content)
-
-  const contentHtml = processedContent.toString()
-
   return {
     id: data.id,
     title: data.title,
     slug: data.slug,
     excerpt: data.excerpt,
-    content: contentHtml,
+    content: data.content,
     coverImage: data.cover_image || "/placeholder.svg?height=600&width=1200",
     date: new Date(data.created_at).toLocaleDateString("en-US", {
       year: "numeric",
@@ -145,47 +132,6 @@ export async function getArticleBySlug(slug: string) {
       slug: tag.slug,
     })),
   }
-}
-
-export async function getRelatedArticles(articleId: string, category: string, limit = 2) {
-  const supabase = createServerSupabaseClient()
-
-  const { data, error } = await supabase
-    .from("articles")
-    .select(`
-      id,
-      title,
-      slug,
-      cover_image,
-      created_at,
-      read_time,
-      categories!articles_category_id_fkey (
-        name
-      )
-    `)
-    .eq("categories.name", category)
-    .neq("id", articleId)
-    .eq("published", true)
-    .order("created_at", { ascending: false })
-    .limit(limit)
-
-  if (error) {
-    console.error("Error fetching related articles:", error)
-    return []
-  }
-
-  return data.map((article) => ({
-    id: article.id,
-    title: article.title,
-    slug: article.slug,
-    coverImage: article.cover_image || "/placeholder.svg?height=200&width=200",
-    date: new Date(article.created_at).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    }),
-    readTime: `${article.read_time || 5} min read`,
-  }))
 }
 
 export async function getCategories() {

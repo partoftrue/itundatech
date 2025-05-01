@@ -1,7 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { createServerSupabaseClient } from "@/lib/supabase"
 import { formatDistanceToNow } from "date-fns"
-import { MessageSquareOff } from "lucide-react"
 
 export async function CommentList({ articleId }: { articleId: string }) {
   const supabase = createServerSupabaseClient()
@@ -26,10 +25,8 @@ export async function CommentList({ articleId }: { articleId: string }) {
 
   if (!comments || comments.length === 0) {
     return (
-      <div className="text-center py-12 bg-muted/30 rounded-lg">
-        <MessageSquareOff className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-        <p className="text-muted-foreground mb-2">No comments yet.</p>
-        <p className="text-sm text-muted-foreground">Be the first to share your thoughts!</p>
+      <div className="text-center py-8">
+        <p className="text-muted-foreground">No comments yet. Be the first to share your thoughts!</p>
       </div>
     )
   }
