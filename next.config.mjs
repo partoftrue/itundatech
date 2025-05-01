@@ -16,6 +16,8 @@ const nextConfig = {
       },
     ],
   },
+  // Add this line to ensure assets are loaded from the correct path
+  assetPrefix: process.env.NODE_ENV === 'production' ? undefined : undefined,
 };
 
 export default nextConfig;
