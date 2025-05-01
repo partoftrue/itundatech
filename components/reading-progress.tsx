@@ -1,26 +1,32 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState, useEffect } from "react"
+import { motion, useScroll } from "framer-motion"
 
 export function ReadingProgress() {
-  const [progress, setProgress] = useState(0)
+  const { scrollYProgress } = useScroll()
+  const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
-    const updateProgress = () => {
-      // Calculate how far the user has scrolled
-      const scrollTop = window.scrollY
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight
-      const scrollPercent = scrollTop / docHeight
-      setProgress(scrollPercent * 100)
+    const handleScroll = () => {
+      // Show progress bar after scrolling down a bit
+      if (window.scrollY > 150) {
+        setIsVisible(true)
+      } else {
+        setIsVisible(false)
+      }
     }
 
-    window.addEventListener("scroll", updateProgress)
-    return () => window.removeEventListener("scroll", updateProgress)
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
+  if (!isVisible) return null
+
   return (
-    <div className="fixed top-0 left-0 right-0 h-1 z-50">
-      <div className="h-full bg-itunda-purple transition-all duration-100 ease-out" style={{ width: `${progress}%` }} />
-    </div>
+    <motion.div
+      className="fixed top-16 left-0 right-0 h-1 bg-primary z-50"
+      style={{ scaleX: scrollYProgress, transformOrigin: "0%" }}
+    />
   )
 }

@@ -2,43 +2,78 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
-import { ThemeProvider } from "@/components/theme-provider"
 import Header from "@/components/header"
-import Footer from "@/components/footer"
-import { AuthProvider } from "@/components/auth/auth-provider"
+import { Footer } from "@/components/footer"
+import { ThemeProvider } from "@/components/theme-provider"
+import PWAInstallPrompt from "@/components/pwa-install-prompt"
+import NetworkStatus from "@/components/network-status"
 import { Toaster } from "@/components/ui/toaster"
 import { ScrollToTop } from "@/components/scroll-to-top"
+import { FloatingActionButton } from "@/components/floating-action-button"
+import { ToastInitializer } from "@/components/toast-initializer"
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-})
+const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "itunda.tech - Developer & Designer Insights",
-  description: "A platform for sharing developer and designer insights",
+  title: "ItundaTech - Technology News and Insights",
+  description: "Latest news, articles and resources on technology, development, data science and design",
+  applicationName: "ItundaTech",
+  appleWebApp: {
+    capable: true,
+    title: "ItundaTech",
+    statusBarStyle: "default",
+  },
+  formatDetection: {
+    telephone: false,
+  },
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#1f78ff" },
+    { media: "(prefers-color-scheme: dark)", color: "#1b1e3d" },
+  ],
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+  },
+  icons: {
+    icon: [
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-icon-light-180.png", sizes: "180x180", type: "image/png" }],
+    other: [
+      {
+        rel: "mask-icon",
+        url: "/safari-pinned-tab.png",
+        color: "#1f78ff",
+      },
+    ],
+  },
+  manifest: "/manifest.json",
     generator: 'v0.dev'
 }
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode
-}>) {
+}) {
   return (
-    <html lang="en" suppressHydrationWarning className={inter.variable}>
-      <body className="font-sans">
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-          <AuthProvider>
-            <div className="flex min-h-screen flex-col">
-              <Header />
-              <main className="flex-1">{children}</main>
-              <Footer />
-              <ScrollToTop />
-            </div>
-            <Toaster />
-          </AuthProvider>
+    <html lang="en" suppressHydrationWarning>
+      <head />
+      <body className={inter.className}>
+        <ThemeProvider attribute="class" defaultTheme="light">
+          <div className="flex flex-col min-h-screen">
+            <Header />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </div>
+          <PWAInstallPrompt />
+          <NetworkStatus />
+          <ScrollToTop />
+          <FloatingActionButton />
+          <Toaster />
+          <ToastInitializer />
         </ThemeProvider>
       </body>
     </html>

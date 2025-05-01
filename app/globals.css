@@ -6,46 +6,63 @@
   :root {
     --background: 0 0% 100%;
     --foreground: 222 47% 11%;
+
     --card: 0 0% 100%;
     --card-foreground: 222 47% 11%;
+
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
-    --primary: 260 80% 58%;
+
+    --primary: 217 90% 56%; /* Updated to match #1f78ff */
     --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
+
+    --secondary: 210 40% 96%;
     --secondary-foreground: 222 47% 11%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 260 80% 58%;
+
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 210 40% 96%;
     --accent-foreground: 222 47% 11%;
-    --destructive: 0 84.2% 60.2%;
+
+    --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 260 80% 58%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 217 90% 56%; /* Updated to match #1f78ff */
+
     --radius: 0.5rem;
   }
 
   .dark {
     --background: 222 47% 11%;
     --foreground: 210 40% 98%;
+
     --card: 222 47% 11%;
     --card-foreground: 210 40% 98%;
+
     --popover: 222 47% 11%;
     --popover-foreground: 210 40% 98%;
-    --primary: 260 80% 58%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 217.2 32.6% 17.5%;
+
+    --primary: 217 90% 56%; /* Updated to match #1f78ff */
+    --primary-foreground: 222 47% 11%;
+
+    --secondary: 217 33% 17%;
     --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 260 80% 58%;
+
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 217 33% 17%;
     --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
+
+    --destructive: 0 63% 31%;
     --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 260 80% 58%;
+
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 217 90% 56%; /* Updated to match #1f78ff */
   }
 }
 
@@ -57,121 +74,148 @@
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+
+  /* Toss Tech style typography */
   h1,
   h2,
   h3,
   h4,
   h5,
   h6 {
-    @apply font-medium tracking-tight;
+    @apply font-bold tracking-tight;
+  }
+
+  h1 {
+    @apply text-3xl md:text-4xl;
+  }
+
+  h2 {
+    @apply text-2xl md:text-3xl;
+  }
+
+  h3 {
+    @apply text-xl md:text-2xl;
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Focus styles */
+  :focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2;
   }
 }
 
-@layer components {
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
+@layer utilities {
+  @keyframes progress {
+    0% {
+      width: 0%;
+    }
+    100% {
+      width: 100%;
+    }
   }
 
+  .animate-progress {
+    animation: progress 1.8s ease-in-out;
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes pulse-custom {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
+
+  .animate-pulse {
+    animation: pulse-custom 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  /* Hide scrollbar but allow scrolling */
   .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
   }
-}
 
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
   }
-  50% {
-    transform: translateY(-10px);
-  }
-}
 
-@keyframes float-delayed {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-@keyframes spin-slow {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes fade-in {
-  from {
+  /* Page transitions */
+  .page-transition-enter {
     opacity: 0;
     transform: translateY(10px);
   }
-  to {
+
+  .page-transition-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 300ms, transform 300ms;
+  }
+
+  .page-transition-exit {
     opacity: 1;
     transform: translateY(0);
   }
+
+  .page-transition-exit-active {
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 300ms, transform 300ms;
+  }
 }
 
-.animate-float {
-  animation: float 6s ease-in-out infinite;
+/* Toss Tech specific styles */
+.category-tab {
+  @apply relative px-6 py-4 text-base font-medium transition-colors;
 }
 
-.animate-float-delayed {
-  animation: float-delayed 6s ease-in-out infinite 2s;
+.category-tab.active {
+  @apply font-bold;
 }
 
-.animate-spin-slow {
-  animation: spin-slow 20s linear infinite;
+.category-tab.active::after {
+  content: "";
+  @apply absolute bottom-0 left-0 w-full h-0.5 bg-black dark:bg-white;
 }
 
-.animate-fade-in {
-  animation: fade-in 0.5s ease-out forwards;
+.article-title {
+  @apply font-bold text-xl md:text-2xl leading-tight transition-colors duration-200;
 }
 
-/* Prose styles to match itunda.tech */
-.prose h2 {
-  @apply text-2xl mt-12 mb-6 text-itunda-darkPurple;
+.article-meta {
+  @apply text-sm text-gray-500 dark:text-gray-400;
 }
 
-.prose h3 {
-  @apply text-xl mt-10 mb-4 text-itunda-darkPurple;
+/* Image hover effects */
+.image-hover {
+  @apply overflow-hidden rounded-lg;
 }
 
-.prose p {
-  @apply mb-6 leading-relaxed;
+.image-hover img {
+  @apply transition-transform duration-300 ease-in-out;
 }
 
-.prose code {
-  @apply bg-muted px-1.5 py-0.5 rounded text-sm;
+.image-hover:hover img {
+  @apply scale-105;
 }
 
-.prose pre {
-  @apply bg-muted p-4 rounded-lg my-6 overflow-x-auto;
+/* Link hover effects */
+.link-hover {
+  @apply relative inline-block;
 }
 
-.prose a {
-  @apply text-itunda-purple no-underline hover:underline;
+.link-hover::after {
+  content: "";
+  @apply absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 ease-in-out;
 }
 
-.prose ul,
-.prose ol {
-  @apply my-6 pl-6;
-}
-
-.prose li {
-  @apply mb-2;
-}
-
-.prose img {
-  @apply rounded-lg my-8;
-}
-
-.prose blockquote {
-  @apply border-l-4 border-itunda-lightPurple pl-4 italic my-6;
+.link-hover:hover::after {
+  @apply w-full;
 }

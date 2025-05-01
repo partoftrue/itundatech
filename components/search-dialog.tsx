@@ -2,154 +2,146 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { useState } from "react"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Search, Loader2, ArrowRight } from "lucide-react"
-import { useRouter } from "next/navigation"
-import { createClientSupabaseClient } from "@/lib/supabase"
+import { Search, X } from "lucide-react"
 import Link from "next/link"
+import { motion, AnimatePresence } from "framer-motion"
 
-interface SearchResult {
-  id: string
-  title: string
-  slug: string
-  excerpt: string
-  category: string
-}
+// Mock search results
+const mockResults = [
+  {
+    title: "Simplicity 4: 한 번쯤 이상을 꿈꾸본 모두에게",
+    slug: "simplicity-4-conference",
+    category: "design",
+  },
+  {
+    title: "ItundaTech는 어떻게 광고를 보여줄까?",
+    slug: "how-itundatech-shows-ads",
+    category: "development",
+  },
+  {
+    title: "AI 개발자를 위한 최신 도구 모음",
+    slug: "ai-developer-tools-2025",
+    category: "development",
+  },
+  {
+    title: "클라우드 네이티브 애플리케이션 설계 가이드",
+    slug: "cloud-native-app-design",
+    category: "development",
+  },
+]
 
-export function SearchDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {
+export function SearchDialog() {
+  const [open, setOpen] = useState(false)
   const [query, setQuery] = useState("")
-  const [results, setResults] = useState<SearchResult[]>([])
-  const [isLoading, setIsLoading] = useState(false)
-  const router = useRouter()
-  const supabase = createClientSupabaseClient()
+  const [isSearching, setIsSearching] = useState(false)
+  const [results, setResults] = useState<typeof mockResults>([])
 
-  useEffect(() => {
-    const searchArticles = async () => {
-      if (!query.trim() || query.length < 2) {
-        setResults([])
-        return
-      }
-
-      setIsLoading(true)
-
-      try {
-        const { data, error } = await supabase
-          .from("articles")
-          .select(`
-            id,
-            title,
-            slug,
-            excerpt,
-            categories (
-              name
-            )
-          `)
-          .or(`title.ilike.%${query}%, excerpt.ilike.%${query}%`)
-          .eq("published", true)
-          .order("created_at", { ascending: false })
-          .limit(5)
-
-        if (error) throw error
-
-        const formattedResults = data.map((item) => ({
-          id: item.id,
-          title: item.title,
-          slug: item.slug,
-          excerpt: item.excerpt,
-          category: item.categories?.name || "Uncategorized",
-        }))
-
-        setResults(formattedResults)
-      } catch (error) {
-        console.error("Error searching:", error)
-        setResults([])
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    const debounce = setTimeout(() => {
-      searchArticles()
-    }, 300)
-
-    return () => clearTimeout(debounce)
-  }, [query, supabase])
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
-    if (query.trim()) {
-      onOpenChange(false)
-      router.push(`/search?q=${encodeURIComponent(query.trim())}`)
-    }
+    if (!query.trim()) return
+
+    setIsSearching(true)
+
+    // Simulate API call
+    setTimeout(() => {
+      const filteredResults = mockResults.filter((item) => item.title.toLowerCase().includes(query.toLowerCase()))
+      setResults(filteredResults)
+      setIsSearching(false)
+    }, 500)
   }
 
-  const handleResultClick = () => {
-    onOpenChange(false)
+  const clearSearch = () => {
+    setQuery("")
+    setResults([])
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[550px]">
-        <DialogHeader>
-          <DialogTitle>Search Articles</DialogTitle>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button variant="ghost" size="icon" className="rounded-full">
+          <Search className="h-5 w-5" />
+          <span className="sr-only">Search</span>
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[600px] p-0">
+        <DialogHeader className="px-4 pt-4">
+          <DialogTitle>검색</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="relative">
-          <Input
-            placeholder="Search for articles..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            className="pr-10 rounded-lg"
-            autoFocus
-          />
-          <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-            {isLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+        <div className="p-4 space-y-4">
+          <form onSubmit={handleSearch} className="flex items-center space-x-2">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="검색어를 입력하세요..."
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="pl-10 pr-10"
+              />
+              {query && (
+                <button
+                  type="button"
+                  onClick={clearSearch}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2"
+                >
+                  <X className="h-4 w-4 text-muted-foreground hover:text-foreground" />
+                  <span className="sr-only">Clear search</span>
+                </button>
+              )}
+            </div>
+            <Button type="submit">검색</Button>
+          </form>
+
+          <div className="min-h-[200px]">
+            {isSearching ? (
+              <div className="flex items-center justify-center h-[200px]">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+              </div>
+            ) : results.length > 0 ? (
+              <AnimatePresence>
+                <div className="space-y-2">
+                  {results.map((result, index) => (
+                    <motion.div
+                      key={result.slug}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.2, delay: index * 0.05 }}
+                    >
+                      <Link
+                        href={`/article/${result.slug}`}
+                        onClick={() => setOpen(false)}
+                        className="block p-3 rounded-md hover:bg-muted transition-colors"
+                      >
+                        <div className="flex items-center justify-between">
+                          <h3 className="font-medium">{result.title}</h3>
+                          <span className="text-xs text-muted-foreground px-2 py-1 rounded-full bg-muted">
+                            {result.category === "development"
+                              ? "개발"
+                              : result.category === "data"
+                                ? "데이터/ML"
+                                : "디자인"}
+                          </span>
+                        </div>
+                      </Link>
+                    </motion.div>
+                  ))}
+                </div>
+              </AnimatePresence>
+            ) : query && !isSearching ? (
+              <div className="flex flex-col items-center justify-center h-[200px] text-center">
+                <p className="text-muted-foreground">검색 결과가 없습니다.</p>
+                <p className="text-sm text-muted-foreground">다른 검색어를 시도해보세요.</p>
+              </div>
             ) : (
-              <Search className="h-4 w-4 text-muted-foreground" />
+              <div className="flex flex-col items-center justify-center h-[200px] text-center">
+                <p className="text-muted-foreground">검색어를 입력하세요.</p>
+                <p className="text-sm text-muted-foreground">기사 제목으로 검색할 수 있습니다.</p>
+              </div>
             )}
           </div>
-        </form>
-
-        <div className="mt-4 max-h-[300px] overflow-auto">
-          {results.length > 0 ? (
-            <div className="space-y-4">
-              {results.map((result) => (
-                <div key={result.id} className="p-3 hover:bg-muted rounded-lg transition-colors">
-                  <Link href={`/articles/${result.slug}`} className="block" onClick={handleResultClick}>
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <div className="text-sm text-muted-foreground mb-1">{result.category}</div>
-                        <h3 className="font-medium mb-1">{result.title}</h3>
-                        <p className="text-sm text-muted-foreground line-clamp-2">{result.excerpt}</p>
-                      </div>
-                      <ArrowRight className="h-4 w-4 mt-1 text-muted-foreground" />
-                    </div>
-                  </Link>
-                </div>
-              ))}
-            </div>
-          ) : query.length > 0 && !isLoading ? (
-            <div className="text-center py-8">
-              <p className="text-muted-foreground">No results found for "{query}"</p>
-              <Button
-                variant="link"
-                className="mt-2"
-                onClick={() => {
-                  onOpenChange(false)
-                  router.push(`/search?q=${encodeURIComponent(query.trim())}`)
-                }}
-              >
-                View all search results
-              </Button>
-            </div>
-          ) : (
-            <div className="text-center py-8">
-              <p className="text-muted-foreground">Start typing to search articles</p>
-            </div>
-          )}
         </div>
       </DialogContent>
     </Dialog>
