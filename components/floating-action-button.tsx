@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Plus, X, Share2, Search, Bell } from "lucide-react"
+import { Plus, X, Search, Bell } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { toast } from "@/components/ui/use-toast"
 
@@ -26,76 +26,6 @@ export function FloatingActionButton() {
     window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
   }, [lastScrollY])
-
-  const handleShare = async () => {
-    try {
-      // Get the current URL safely
-      const currentUrl = typeof window !== "undefined" ? window.location.href : ""
-      const pageTitle = typeof document !== "undefined" ? document.title : "ItundaTech"
-
-      if (typeof navigator !== "undefined" && navigator.share) {
-        try {
-          await navigator.share({
-            title: pageTitle,
-            url: currentUrl,
-          })
-          toast({
-            title: "공유 성공",
-            description: "콘텐츠가 성공적으로 공유되었습니다.",
-          })
-        } catch (error: any) {
-          console.error("Error sharing:", error)
-
-          // If permission denied or other sharing error, fall back to clipboard
-          if (error.name === "NotAllowedError" || (error.message && error.message.includes("Permission"))) {
-            await copyToClipboard(currentUrl)
-          } else {
-            toast({
-              title: "공유하기 실패",
-              description: "공유 중 오류가 발생했습니다. 링크를 복사합니다.",
-            })
-            await copyToClipboard(currentUrl)
-          }
-        }
-      } else {
-        // Fallback for browsers that don't support the Web Share API
-        await copyToClipboard(currentUrl)
-      }
-    } catch (error) {
-      console.error("Share error:", error)
-      toast({
-        title: "공유하기 실패",
-        description: "공유 기능을 사용할 수 없습니다.",
-      })
-    } finally {
-      setIsOpen(false)
-    }
-  }
-
-  // Add this new copyToClipboard function after the handleShare function
-  const copyToClipboard = async (text: string) => {
-    if (typeof navigator === "undefined" || !navigator.clipboard) {
-      toast({
-        title: "복사 실패",
-        description: "클립보드에 복사할 수 없습니다.",
-      })
-      return
-    }
-
-    try {
-      await navigator.clipboard.writeText(text)
-      toast({
-        title: "링크 복사됨",
-        description: "현재 페이지 링크가 클립보드에 복사되었습니다.",
-      })
-    } catch (error) {
-      console.error("Clipboard error:", error)
-      toast({
-        title: "복사 실패",
-        description: "클립보드에 복사할 수 없습니다.",
-      })
-    }
-  }
 
   const handleSearch = () => {
     // This would typically open the search dialog
@@ -140,10 +70,10 @@ export function FloatingActionButton() {
                     <Button
                       size="icon"
                       className="rounded-full shadow-lg h-12 w-12 bg-primary hover:bg-primary/90"
-                      onClick={handleShare}
+                      onClick={handleSearch}
                     >
-                      <Share2 className="h-5 w-5 text-white" />
-                      <span className="sr-only">공유하기</span>
+                      <Search className="h-5 w-5 text-white" />
+                      <span className="sr-only">검색</span>
                     </Button>
                   </motion.div>
                   <motion.div
@@ -152,22 +82,6 @@ export function FloatingActionButton() {
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.8, y: 10 }}
                     transition={{ duration: 0.2, delay: 0.05 }}
-                  >
-                    <Button
-                      size="icon"
-                      className="rounded-full shadow-lg h-12 w-12 bg-primary hover:bg-primary/90"
-                      onClick={handleSearch}
-                    >
-                      <Search className="h-5 w-5 text-white" />
-                      <span className="sr-only">검색</span>
-                    </Button>
-                  </motion.div>
-                  <motion.div
-                    className="absolute bottom-48 right-0 space-y-3"
-                    initial={{ opacity: 0, scale: 0.8, y: 10 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.8, y: 10 }}
-                    transition={{ duration: 0.2, delay: 0.1 }}
                   >
                     <Button
                       size="icon"

@@ -9,12 +9,10 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { motion } from "framer-motion"
 import { ReadingProgress } from "@/components/reading-progress"
 import { TableOfContents } from "@/components/table-of-contents"
-import { ShareArticle } from "@/components/share-article"
 import { NewsletterSubscription } from "@/components/newsletter-subscription"
 import { RelatedArticles } from "@/components/related-articles"
 import { ArticleComments } from "@/components/article-comments"
 import { ImageZoom } from "@/components/image-zoom"
-import { usePathname } from "next/navigation"
 
 // This would normally come from a CMS or API
 const getArticleData = (slug: string) => {
@@ -48,15 +46,6 @@ const getArticleData = (slug: string) => {
 export default function ArticlePage({ params }: { params: { slug: string } }) {
   const [isLoading, setIsLoading] = useState(true)
   const [article, setArticle] = useState<ReturnType<typeof getArticleData> | null>(null)
-  const pathname = usePathname()
-
-  // Get the full URL safely
-  const getFullUrl = () => {
-    if (typeof window !== "undefined") {
-      return `${window.location.origin}${pathname}`
-    }
-    return `https://itundatech.vercel.app${pathname}`
-  }
 
   useEffect(() => {
     // Simulate API call
@@ -104,13 +93,10 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
                 >
                   <h1 className="text-3xl md:text-4xl font-bold leading-tight">{article.title}</h1>
                   <p className="text-xl text-gray-600 dark:text-gray-300">{article.description}</p>
-                  <div className="flex items-center justify-between">
-                    <div className="article-meta">
-                      <time dateTime={article.date}>{formatDate(article.date)}</time>
-                      <span className="mx-1">·</span>
-                      <span>{article.author}</span>
-                    </div>
-                    <ShareArticle title={article.title} url={getFullUrl()} />
+                  <div className="article-meta">
+                    <time dateTime={article.date}>{formatDate(article.date)}</time>
+                    <span className="mx-1">·</span>
+                    <span>{article.author}</span>
                   </div>
                 </motion.div>
 
