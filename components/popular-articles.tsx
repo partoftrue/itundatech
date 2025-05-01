@@ -24,7 +24,7 @@ export function PopularArticles() {
           author: "유아란",
         },
         {
-          title: "Simplicity 4: 한 번쯤 이상을 꿈꾸본 모두에게",
+          title: "Simplicity 4: 한 번쯤 이상을 꿈꿔본 모두에게",
           slug: "simplicity-4-dreams",
           author: "유아란",
         },

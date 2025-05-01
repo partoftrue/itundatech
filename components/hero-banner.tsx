@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import Image from "next/image"
+import { VercelImage } from "./vercel-image"
 
 export default function HeroBanner() {
   return (
@@ -14,7 +14,7 @@ export default function HeroBanner() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <Image src="/logo-white.png" alt="itundatech" width={180} height={45} priority />
+            <VercelImage src="/logo-white.png" alt="itundatech" width={180} height={45} priority />
           </motion.div>
         </div>
       </div>

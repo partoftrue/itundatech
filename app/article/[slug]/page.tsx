@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import Image from "next/image"
 import { formatDate } from "@/lib/utils"
 import CategoryTabs from "@/components/category-tabs"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -11,11 +10,11 @@ import { TableOfContents } from "@/components/table-of-contents"
 import { NewsletterSubscription } from "@/components/newsletter-subscription"
 import { RelatedArticles } from "@/components/related-articles"
 import { ArticleComments } from "@/components/article-comments"
-import { ImageZoom } from "@/components/image-zoom"
 import { ClientOnly } from "@/components/client-only"
 import { PopularArticles } from "@/components/popular-articles"
 import { TagFilter } from "@/components/tag-filter"
 import { ArrowLeft } from "lucide-react"
+import { VercelImage } from "@/components/vercel-image"
 
 // This would normally come from a CMS or API
 const getArticleData = (slug: string) => {
@@ -44,6 +43,34 @@ const getArticleData = (slug: string) => {
     author: "유아란",
     category: "design",
   }
+}
+
+// Custom ImageZoom component that uses VercelImage
+function ImageZoom({
+  src,
+  alt,
+  width,
+  height,
+  priority = false,
+}: {
+  src: string
+  alt: string
+  width: number
+  height: number
+  priority?: boolean
+}) {
+  return (
+    <div className="relative w-full h-full">
+      <VercelImage
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        priority={priority}
+        className="rounded-lg object-cover"
+      />
+    </div>
+  )
 }
 
 export default function ArticlePage({ params }: { params: { slug: string } }) {
@@ -102,7 +129,7 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
                     <p className="text-xl text-gray-600 dark:text-gray-300">{article.description}</p>
                     <div className="flex items-center space-x-4">
                       <div className="flex-shrink-0">
-                        <Image
+                        <VercelImage
                           src="/author-avatar.png"
                           alt={article.author}
                           width={40}

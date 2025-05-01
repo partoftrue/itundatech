@@ -2,8 +2,8 @@
 
 import { cn } from "@/lib/utils"
 import Link from "next/link"
-import Image from "next/image"
 import { formatDate } from "@/lib/utils"
+import { VercelImage } from "./vercel-image"
 
 interface ArticleCardProps {
   title: string
@@ -44,8 +44,8 @@ export default function ArticleCard({
         </div>
         {image && (
           <div className="w-24 h-24 relative overflow-hidden rounded-lg shrink-0">
-            <Image
-              src={image || "/placeholder.svg"}
+            <VercelImage
+              src={image}
               alt={title}
               fill
               className="object-cover transition-all duration-300 group-hover:scale-105"

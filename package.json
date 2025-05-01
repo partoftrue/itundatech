@@ -59,7 +59,6 @@
     "vaul": "^0.9.6",
     "zod": "^3.24.1",
     "@emotion/is-prop-valid": "latest",
-    "next-pwa": "latest",
     "web-push": "latest",
     "sharp": "latest",
     "framer-motion": "latest"

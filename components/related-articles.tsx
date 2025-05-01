@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import Image from "next/image"
 import { formatDate } from "@/lib/utils"
 import { Skeleton } from "@/components/ui/skeleton"
 import { motion } from "framer-motion"
+import { VercelImage } from "./vercel-image"
 
 interface Article {
   title: string
@@ -92,8 +92,8 @@ export function RelatedArticles({ currentSlug, category }: RelatedArticlesProps)
               <Link href={`/article/${article.slug}`} className="group block">
                 <div className="overflow-hidden rounded-lg mb-3">
                   <div className="relative aspect-video overflow-hidden rounded-lg">
-                    <Image
-                      src={article.image || "/placeholder.svg"}
+                    <VercelImage
+                      src={article.image}
                       alt={article.title}
                       fill
                       className="object-cover transition-transform duration-300 group-hover:scale-105"

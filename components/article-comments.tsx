@@ -3,9 +3,9 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { toast } from "@/components/ui/use-toast"
 import { motion } from "framer-motion"
+import { VercelImage } from "./vercel-image"
 
 interface Comment {
   id: string
@@ -102,10 +102,15 @@ function CommentItem({ comment, level = 0 }: { comment: Comment; level?: number 
       transition={{ duration: 0.3 }}
     >
       <div className="flex gap-3 py-4">
-        <Avatar className="h-10 w-10">
-          <AvatarImage src={comment.authorImage || "/placeholder.svg"} alt={comment.author} />
-          <AvatarFallback>{comment.author[0]}</AvatarFallback>
-        </Avatar>
+        <div className="h-10 w-10 rounded-full overflow-hidden relative">
+          <VercelImage
+            src={comment.authorImage || "/placeholder.svg?height=40&width=40&query=avatar"}
+            alt={comment.author}
+            width={40}
+            height={40}
+            className="object-cover"
+          />
+        </div>
         <div className="flex-1">
           <div className="flex items-center justify-between">
             <div>
@@ -211,10 +216,15 @@ export function ArticleComments() {
 
       <div className="space-y-4">
         <div className="flex gap-3">
-          <Avatar className="h-10 w-10">
-            <AvatarImage src="/abstract-geometric-shapes.png" alt="사용자" />
-            <AvatarFallback>사</AvatarFallback>
-          </Avatar>
+          <div className="h-10 w-10 rounded-full overflow-hidden relative">
+            <VercelImage
+              src="/abstract-geometric-shapes.png"
+              alt="사용자"
+              width={40}
+              height={40}
+              className="object-cover"
+            />
+          </div>
           <div className="flex-1 space-y-3">
             <Textarea
               placeholder="댓글을 입력하세요..."

@@ -10,6 +10,7 @@ import { ClientOnly } from "@/components/client-only"
 import { ToastInitializer } from "@/components/toast-initializer"
 import { FloatingActionButton } from "@/components/floating-action-button"
 import { ScrollToTop } from "@/components/scroll-to-top"
+import { ImageDebug } from "@/components/image-debug"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -69,6 +70,7 @@ export default function RootLayout({
           </div>
           <ClientOnly>
             <PWAAndNetworkComponents />
+            <ImageDebug />
           </ClientOnly>
           <Toaster />
           <ToastInitializer />
