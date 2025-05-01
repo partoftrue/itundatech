@@ -2,11 +2,10 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { formatDate } from "@/lib/utils"
 import CategoryTabs from "@/components/category-tabs"
-import { PageTransition } from "@/components/page-transition"
 import { Skeleton } from "@/components/ui/skeleton"
-import { motion } from "framer-motion"
 import { ReadingProgress } from "@/components/reading-progress"
 import { TableOfContents } from "@/components/table-of-contents"
 import { NewsletterSubscription } from "@/components/newsletter-subscription"
@@ -14,6 +13,9 @@ import { RelatedArticles } from "@/components/related-articles"
 import { ArticleComments } from "@/components/article-comments"
 import { ImageZoom } from "@/components/image-zoom"
 import { ClientOnly } from "@/components/client-only"
+import { PopularArticles } from "@/components/popular-articles"
+import { TagFilter } from "@/components/tag-filter"
+import { ArrowLeft } from "lucide-react"
 
 // This would normally come from a CMS or API
 const getArticleData = (slug: string) => {
@@ -59,124 +61,114 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
   }, [params.slug])
 
   return (
-    <PageTransition>
+    <>
       <ClientOnly>
         <ReadingProgress />
       </ClientOnly>
       <div className="flex flex-col min-h-screen">
         <CategoryTabs />
 
-        <article className="container py-8 max-w-4xl mx-auto px-4 md:px-6">
-          {isLoading ? (
-            <>
-              <div className="space-y-4 mb-8">
-                <Skeleton className="h-10 w-3/4" />
-                <Skeleton className="h-6 w-full" />
-                <Skeleton className="h-4 w-48" />
-              </div>
-
-              <Skeleton className="w-full aspect-video mb-8 rounded-lg" />
-
-              <div className="space-y-4">
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-3/4" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-5/6" />
-              </div>
-            </>
-          ) : article ? (
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-              <div className="lg:col-span-3">
-                <motion.div
-                  className="space-y-4 mb-8"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  <h1 className="text-3xl md:text-4xl font-bold leading-tight">{article.title}</h1>
-                  <p className="text-xl text-gray-600 dark:text-gray-300">{article.description}</p>
-                  <div className="article-meta">
-                    <time dateTime={article.date}>{formatDate(article.date)}</time>
-                    <span className="mx-1">·</span>
-                    <span>{article.author}</span>
+        <div className="container py-8 px-4 md:px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <div className="lg:col-span-3">
+              {isLoading ? (
+                <>
+                  <div className="space-y-4 mb-8">
+                    <Skeleton className="h-10 w-3/4" />
+                    <Skeleton className="h-6 w-full" />
+                    <Skeleton className="h-4 w-48" />
                   </div>
-                </motion.div>
 
-                <motion.div
-                  className="relative w-full aspect-video mb-8 rounded-lg overflow-hidden"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                >
-                  <ClientOnly>
-                    <ImageZoom
-                      src={article.image || "/placeholder.svg"}
-                      alt={article.title}
-                      width={800}
-                      height={450}
-                      priority
-                    />
-                  </ClientOnly>
-                </motion.div>
+                  <Skeleton className="w-full aspect-video mb-8 rounded-lg" />
 
-                <motion.div
-                  className="prose prose-slate max-w-none dark:prose-invert"
-                  dangerouslySetInnerHTML={{ __html: article.content }}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.5, delay: 0.4 }}
-                />
-
-                <ClientOnly>
-                  <NewsletterSubscription />
-                </ClientOnly>
-
-                <ClientOnly>
-                  <RelatedArticles currentSlug={params.slug} category={article.category} />
-                </ClientOnly>
-
-                <ClientOnly>
-                  <ArticleComments />
-                </ClientOnly>
-
-                <motion.div
-                  className="mt-12 pt-8 border-t"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.5, delay: 0.6 }}
-                >
-                  <Link href="/" className="text-primary hover:underline flex items-center gap-2 group">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="transition-transform group-hover:-translate-x-1"
-                    >
-                      <path d="m15 18-6-6 6-6" />
-                    </svg>
+                  <div className="space-y-4">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-3/4" />
+                    <Skeleton className="h-4 w-3/4" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-5/6" />
+                  </div>
+                </>
+              ) : article ? (
+                <article>
+                  <Link href="/" className="inline-flex items-center text-sm text-gray-500 hover:text-primary mb-6">
+                    <ArrowLeft className="mr-2 h-4 w-4" />
                     전체 글 목록으로
                   </Link>
-                </motion.div>
-              </div>
 
-              <div className="hidden lg:block">
-                <div className="sticky top-24">
+                  <div className="space-y-4 mb-8">
+                    <h1 className="text-3xl md:text-4xl font-bold leading-tight">{article.title}</h1>
+                    <p className="text-xl text-gray-600 dark:text-gray-300">{article.description}</p>
+                    <div className="flex items-center space-x-4">
+                      <div className="flex-shrink-0">
+                        <Image
+                          src="/author-avatar.png"
+                          alt={article.author}
+                          width={40}
+                          height={40}
+                          className="rounded-full"
+                        />
+                      </div>
+                      <div>
+                        <p className="font-medium">{article.author}</p>
+                        <time dateTime={article.date} className="text-sm text-gray-500">
+                          {formatDate(article.date)}
+                        </time>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="relative w-full aspect-video mb-12 rounded-lg overflow-hidden">
+                    <ClientOnly>
+                      <ImageZoom
+                        src={article.image || "/placeholder.svg"}
+                        alt={article.title}
+                        width={800}
+                        height={450}
+                        priority
+                      />
+                    </ClientOnly>
+                  </div>
+
+                  <div
+                    className="prose prose-lg max-w-none dark:prose-invert mb-12"
+                    dangerouslySetInnerHTML={{ __html: article.content }}
+                  />
+
                   <ClientOnly>
-                    <TableOfContents />
+                    <NewsletterSubscription />
                   </ClientOnly>
+
+                  <ClientOnly>
+                    <RelatedArticles currentSlug={params.slug} category={article.category} />
+                  </ClientOnly>
+
+                  <ClientOnly>
+                    <ArticleComments />
+                  </ClientOnly>
+                </article>
+              ) : null}
+            </div>
+
+            <div className="space-y-8">
+              <div className="sticky top-24">
+                <ClientOnly>
+                  <TableOfContents />
+                </ClientOnly>
+                <div className="mt-8">
+                  <ClientOnly>
+                    <PopularArticles />
+                  </ClientOnly>
+                </div>
+                <div className="mt-8">
+                  <TagFilter />
                 </div>
               </div>
             </div>
-          ) : null}
-        </article>
+          </div>
+        </div>
       </div>
-    </PageTransition>
+    </>
   )
 }

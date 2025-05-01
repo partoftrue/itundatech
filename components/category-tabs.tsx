@@ -4,7 +4,6 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { usePathname } from "next/navigation"
-import { motion } from "framer-motion"
 
 interface Category {
   id: string
@@ -37,27 +36,23 @@ export default function CategoryTabs() {
 
   return (
     <div className="border-b sticky top-16 bg-background z-10">
-      <div className="container px-0">
+      <div className="container px-4 md:px-6">
         <nav className="flex overflow-x-auto scrollbar-hide">
           {categories.map((category) => (
             <Link
               key={category.id}
               href={category.href}
               className={cn(
-                "category-tab relative",
+                "relative px-6 py-4 text-base font-medium transition-colors",
                 activeCategory === category.id
-                  ? "active font-bold"
+                  ? "font-bold"
                   : "text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50",
               )}
               onClick={() => setActiveCategory(category.id)}
             >
               {category.name}
               {activeCategory === category.id && (
-                <motion.div
-                  className="absolute bottom-0 left-0 w-full h-0.5 bg-black dark:bg-white"
-                  layoutId="activeTab"
-                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                />
+                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-black dark:bg-white" />
               )}
             </Link>
           ))}

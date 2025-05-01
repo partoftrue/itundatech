@@ -5,7 +5,9 @@ import CategoryTabs from "@/components/category-tabs"
 import HeroBanner from "@/components/hero-banner"
 import ArticleCard from "@/components/article-card"
 import { ArticleSkeleton } from "@/components/article-skeleton"
-import { PageTransition } from "@/components/page-transition"
+import { PopularArticles } from "@/components/popular-articles"
+import { TagFilter } from "@/components/tag-filter"
+import { ClientOnly } from "@/components/client-only"
 
 // Mock data for articles
 const articles = [
@@ -41,10 +43,27 @@ const articles = [
     author: "이서진",
     slug: "cloud-native-app-design",
   },
+  {
+    title: "디자인 시스템 구축 가이드",
+    description: "효율적인 디자인 시스템을 구축하는 방법을 알아봅니다.",
+    image: "/design-system-abstract.png",
+    date: "2025-04-20",
+    author: "김민지",
+    slug: "design-system-guide",
+  },
+  {
+    title: "UX 리서치의 중요성",
+    description: "사용자 경험 향상을 위한 UX 리서치 방법론",
+    image: "/ux-research-concept.png",
+    date: "2025-04-15",
+    author: "박서연",
+    slug: "importance-of-ux-research",
+  },
 ]
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true)
+  const [selectedTag, setSelectedTag] = useState<string | null>(null)
 
   useEffect(() => {
     // Simulate loading delay
@@ -56,35 +75,38 @@ export default function Home() {
   }, [])
 
   return (
-    <PageTransition>
-      <div className="flex flex-col min-h-screen">
-        <HeroBanner />
-        <CategoryTabs />
+    <div className="flex flex-col min-h-screen">
+      <HeroBanner />
+      <CategoryTabs />
 
-        <section className="container py-8 px-4 md:px-6">
-          <div className="grid gap-8">
+      <div className="container py-8 px-4 md:px-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          <div className="lg:col-span-3">
             {isLoading ? (
               <>
                 <ArticleSkeleton featured={true} />
-                <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-3">
-                  {[...Array(3)].map((_, index) => (
-                    <ArticleSkeleton key={index} />
-                  ))}
-                </div>
+                {[...Array(4)].map((_, index) => (
+                  <ArticleSkeleton key={index} />
+                ))}
               </>
             ) : (
               <>
                 <ArticleCard {...articles[0]} featured={true} />
-                <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-3">
-                  {articles.slice(1).map((article, index) => (
-                    <ArticleCard key={index} {...article} />
-                  ))}
-                </div>
+                {articles.slice(1).map((article, index) => (
+                  <ArticleCard key={index} {...article} />
+                ))}
               </>
             )}
           </div>
-        </section>
+
+          <div className="space-y-8">
+            <ClientOnly>
+              <PopularArticles />
+            </ClientOnly>
+            <TagFilter onTagSelect={setSelectedTag} />
+          </div>
+        </div>
       </div>
-    </PageTransition>
+    </div>
   )
 }
