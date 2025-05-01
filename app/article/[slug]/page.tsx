@@ -14,6 +14,7 @@ import { NewsletterSubscription } from "@/components/newsletter-subscription"
 import { RelatedArticles } from "@/components/related-articles"
 import { ArticleComments } from "@/components/article-comments"
 import { ImageZoom } from "@/components/image-zoom"
+import { usePathname } from "next/navigation"
 
 // This would normally come from a CMS or API
 const getArticleData = (slug: string) => {
@@ -47,6 +48,15 @@ const getArticleData = (slug: string) => {
 export default function ArticlePage({ params }: { params: { slug: string } }) {
   const [isLoading, setIsLoading] = useState(true)
   const [article, setArticle] = useState<ReturnType<typeof getArticleData> | null>(null)
+  const pathname = usePathname()
+
+  // Get the full URL safely
+  const getFullUrl = () => {
+    if (typeof window !== "undefined") {
+      return `${window.location.origin}${pathname}`
+    }
+    return `https://itundatech.vercel.app${pathname}`
+  }
 
   useEffect(() => {
     // Simulate API call
@@ -100,7 +110,7 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
                       <span className="mx-1">·</span>
                       <span>{article.author}</span>
                     </div>
-                    <ShareArticle title={article.title} url={window.location.href} />
+                    <ShareArticle title={article.title} url={getFullUrl()} />
                   </div>
                 </motion.div>
 

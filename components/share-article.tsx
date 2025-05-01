@@ -16,6 +16,14 @@ export function ShareArticle({ title, url }: ShareArticleProps) {
   const [copied, setCopied] = useState(false)
 
   const copyToClipboard = async () => {
+    if (typeof navigator === "undefined" || !navigator.clipboard) {
+      toast({
+        title: "복사 실패",
+        description: "클립보드에 복사할 수 없습니다.",
+      })
+      return
+    }
+
     try {
       await navigator.clipboard.writeText(url)
       setCopied(true)
@@ -34,14 +42,17 @@ export function ShareArticle({ title, url }: ShareArticleProps) {
   }
 
   const shareOnTwitter = () => {
+    if (typeof window === "undefined") return
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`)
   }
 
   const shareOnFacebook = () => {
+    if (typeof window === "undefined") return
     window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`)
   }
 
   const shareOnLinkedIn = () => {
+    if (typeof window === "undefined") return
     window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`)
   }
 

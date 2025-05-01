@@ -29,11 +29,15 @@ export function FloatingActionButton() {
 
   const handleShare = async () => {
     try {
-      if (navigator && typeof navigator.share === "function") {
+      // Get the current URL safely
+      const currentUrl = typeof window !== "undefined" ? window.location.href : ""
+      const pageTitle = typeof document !== "undefined" ? document.title : "ItundaTech"
+
+      if (typeof navigator !== "undefined" && navigator.share) {
         try {
           await navigator.share({
-            title: document.title,
-            url: window.location.href,
+            title: pageTitle,
+            url: currentUrl,
           })
           toast({
             title: "공유 성공",
@@ -43,19 +47,19 @@ export function FloatingActionButton() {
           console.error("Error sharing:", error)
 
           // If permission denied or other sharing error, fall back to clipboard
-          if (error.name === "NotAllowedError" || error.message.includes("Permission")) {
-            await copyToClipboard()
+          if (error.name === "NotAllowedError" || (error.message && error.message.includes("Permission"))) {
+            await copyToClipboard(currentUrl)
           } else {
             toast({
               title: "공유하기 실패",
               description: "공유 중 오류가 발생했습니다. 링크를 복사합니다.",
             })
-            await copyToClipboard()
+            await copyToClipboard(currentUrl)
           }
         }
       } else {
         // Fallback for browsers that don't support the Web Share API
-        await copyToClipboard()
+        await copyToClipboard(currentUrl)
       }
     } catch (error) {
       console.error("Share error:", error)
@@ -69,9 +73,17 @@ export function FloatingActionButton() {
   }
 
   // Add this new copyToClipboard function after the handleShare function
-  const copyToClipboard = async () => {
+  const copyToClipboard = async (text: string) => {
+    if (typeof navigator === "undefined" || !navigator.clipboard) {
+      toast({
+        title: "복사 실패",
+        description: "클립보드에 복사할 수 없습니다.",
+      })
+      return
+    }
+
     try {
-      await navigator.clipboard.writeText(window.location.href)
+      await navigator.clipboard.writeText(text)
       toast({
         title: "링크 복사됨",
         description: "현재 페이지 링크가 클립보드에 복사되었습니다.",
