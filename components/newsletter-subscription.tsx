@@ -5,77 +5,101 @@ import type React from "react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { toast } from "@/components/ui/use-toast"
-import { motion } from "framer-motion"
+import { Mail, CheckCircle2 } from "lucide-react"
+import { cn } from "@/lib/utils"
 
-export function NewsletterSubscription() {
+interface NewsletterSubscriptionProps {
+  className?: string
+  variant?: "default" | "compact"
+}
+
+export function NewsletterSubscription({ className, variant = "default" }: NewsletterSubscriptionProps) {
   const [email, setEmail] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
-  const [isSubscribed, setIsSubscribed] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-
     if (!email || !email.includes("@")) {
-      toast({
-        title: "유효하지 않은 이메일",
-        description: "유효한 이메일 주소를 입력해주세요.",
-        variant: "destructive",
-      })
+      setError("Please enter a valid email address")
       return
     }
 
-    setIsLoading(true)
+    setIsSubmitting(true)
+    setError(null)
 
     // Simulate API call
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000))
-      setIsSubscribed(true)
-      toast({
-        title: "구독 완료!",
-        description: "ItundaTech 뉴스레터 구독이 완료되었습니다.",
-      })
-    } catch (error) {
-      toast({
-        title: "오류 발생",
-        description: "구독 중 문제가 발생했습니다. 다시 시도해주세요.",
-        variant: "destructive",
-      })
+      setIsSuccess(true)
+      setEmail("")
+    } catch (err) {
+      setError("Something went wrong. Please try again.")
     } finally {
-      setIsLoading(false)
+      setIsSubmitting(false)
     }
   }
 
-  return (
-    <motion.div
-      className="bg-muted p-6 rounded-lg"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      <h3 className="text-xl font-bold mb-2">ItundaTech 뉴스레터 구독하기</h3>
-      <p className="text-muted-foreground mb-4">최신 기술 트렌드와 개발 인사이트를 이메일로 받아보세요.</p>
-
-      {isSubscribed ? (
-        <div className="bg-primary/10 p-4 rounded-md text-center">
-          <p className="font-medium text-primary">구독해주셔서 감사합니다!</p>
-          <p className="text-sm mt-1">곧 최신 소식을 보내드리겠습니다.</p>
-        </div>
-      ) : (
-        <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
-          <Input
-            type="email"
-            placeholder="이메일 주소"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="flex-1"
-            required
-          />
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? "처리 중..." : "구독하기"}
+  if (variant === "compact") {
+    return (
+      <div className={cn("w-full", className)}>
+        <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2">
+          <div className="flex-1 relative">
+            <Input
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={isSubmitting || isSuccess}
+              className="rounded-full pr-10"
+            />
+            <Mail className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          </div>
+          <Button type="submit" disabled={isSubmitting || isSuccess} className="rounded-full">
+            {isSubmitting ? "Subscribing..." : isSuccess ? "Subscribed!" : "Subscribe"}
+            {isSuccess && <CheckCircle2 className="ml-2 h-4 w-4" />}
           </Button>
         </form>
-      )}
-    </motion.div>
+        {error && <p className="text-sm text-red-500 mt-2">{error}</p>}
+      </div>
+    )
+  }
+
+  return (
+    <div className={cn("bg-muted/50 rounded-xl p-8", className)}>
+      <div className="flex flex-col items-center text-center max-w-md mx-auto">
+        <div className="bg-toss-blue/10 p-3 rounded-full mb-4">
+          <Mail className="h-6 w-6 text-toss-blue" />
+        </div>
+        <h3 className="text-xl font-medium mb-2">Stay in the loop</h3>
+        <p className="text-muted-foreground mb-6">
+          Subscribe to our newsletter to get the latest articles, insights, and updates delivered to your inbox.
+        </p>
+        {isSuccess ? (
+          <div className="flex items-center justify-center gap-2 text-toss-blue">
+            <CheckCircle2 className="h-5 w-5" />
+            <span>Thanks for subscribing!</span>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="w-full">
+            <div className="flex flex-col sm:flex-row gap-2">
+              <Input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={isSubmitting}
+                className="rounded-full"
+              />
+              <Button type="submit" disabled={isSubmitting} className="rounded-full">
+                {isSubmitting ? "Subscribing..." : "Subscribe"}
+              </Button>
+            </div>
+            {error && <p className="text-sm text-red-500 mt-2">{error}</p>}
+          </form>
+        )}
+      </div>
+    </div>
   )
 }

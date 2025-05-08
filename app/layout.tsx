@@ -1,94 +1,69 @@
 import type React from "react"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
-import Header from "@/components/header"
-import { Footer } from "@/components/footer"
 import { ThemeProvider } from "@/components/theme-provider"
+import Header from "@/components/header"
+import Footer from "@/components/footer"
+import { AuthProvider } from "@/components/auth/auth-provider"
 import { Toaster } from "@/components/ui/toaster"
-import { ClientOnly } from "@/components/client-only"
-import { ToastInitializer } from "@/components/toast-initializer"
-import { FloatingActionButton } from "@/components/floating-action-button"
 import { ScrollToTop } from "@/components/scroll-to-top"
-import { ImageDebug } from "@/components/image-debug"
-import { FaviconDebug } from "@/components/favicon-debug"
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+})
 
 export const metadata: Metadata = {
-  title: "ItundaTech - Technology News and Insights",
-  description: "Latest news, articles and resources on technology, development, data science and design",
-  applicationName: "ItundaTech",
-  appleWebApp: {
-    capable: true,
-    title: "ItundaTech",
-    statusBarStyle: "default",
-  },
-  formatDetection: {
-    telephone: false,
-  },
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#1f78ff" },
-    { media: "(prefers-color-scheme: dark)", color: "#1b1e3d" },
-  ],
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
-  },
+  title: "itunda.tech - Developer & Designer Insights",
+  description: "A platform for sharing developer and designer insights",
   icons: {
-    icon: [
-      { url: "/favicon.ico", sizes: "any" },
-      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-    ],
-    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+    icon: [{ url: "/icon.png" }],
+    shortcut: ["/icon.png"],
+    apple: [{ url: "/apple-icon.png" }],
     other: [
       {
-        rel: "mask-icon",
-        url: "/safari-pinned-tab.png",
-        color: "#1f78ff",
+        rel: "icon",
+        type: "image/png",
+        url: "/icon.png",
       },
     ],
   },
-  manifest: "/manifest.json",
     generator: 'v0.dev'
+}
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  themeColor: "#1873ff",
 }
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode
-}) {
+}>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head />
-      <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="light">
-          <div className="flex flex-col min-h-screen">
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
-          <ClientOnly>
-            <PWAAndNetworkComponents />
-            <ImageDebug />
-          </ClientOnly>
-          <Toaster />
-          <ToastInitializer />
+    <html lang="en" suppressHydrationWarning className={inter.variable}>
+      <head>
+        <link rel="icon" href="/icon.png" />
+      </head>
+      <body className="font-sans">
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+          <AuthProvider>
+            <div className="flex min-h-screen flex-col">
+              <Header />
+              <main className="flex-1">{children}</main>
+              <Footer />
+              <ScrollToTop />
+            </div>
+            <Toaster />
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>
-  )
-}
-
-// Separate component for browser-only features
-function PWAAndNetworkComponents() {
-  return (
-    <>
-      <FloatingActionButton />
-      <ScrollToTop />
-      <FaviconDebug />
-    </>
   )
 }

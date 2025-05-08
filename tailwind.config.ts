@@ -26,7 +26,7 @@ const config = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#1f78ff", // Updated brand color
+          DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
@@ -53,6 +53,15 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        brand: "#1873ff", // Our new brand color
+        itunda: {
+          purple: "#6C3CE9",
+          darkPurple: "#4A2899",
+          lightPurple: "#9B7AFF",
+          navy: "#1A2542",
+          lightBlue: "#F0F4FF",
+          blue: "#1873ff", // Adding our brand blue here too
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -73,9 +82,15 @@ const config = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      fontFamily: {
+        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+      },
+      maxWidth: {
+        "screen-xl": "1200px",
+      },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
 } satisfies Config
 
 export default config
